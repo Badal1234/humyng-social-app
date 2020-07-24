@@ -1,0 +1,221 @@
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import {moderateScale} from 'react-native-size-matters';
+import {styles} from './styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {getAuthor} from '../../../../Api/Post';
+import {getFromStorage} from '../../../../Api/misc';
+import * as userAuthActions from '@Actions/user.authAction';
+import {connect} from 'react-redux';
+import FastImage from 'react-native-fast-image';
+import {Auth} from 'aws-amplify';
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+
+const Profile = ({ navigation, Logout, username}) => {
+  const [data, set_data] = useState({data: {}});
+  const [profile_uri, set_profile_uri] = useState('');
+  const contents = [
+    {
+      icon: 'bookmark',
+      name: 'Bookmark',
+    },
+    {
+      icon: 'edit',
+      name: 'Edit Profile',
+      route: 'EditProfile',
+      info: data,
+    },
+    {
+      icon: 'wrench',
+      name: 'Settings',
+    },
+  ];
+
+  const posts = [
+    {thumbnail: data.profile_uri, type: 'image'},
+    {thumbnail: data.profile_uri, type: 'video'},
+    {thumbnail: data.profile_uri, type: 'video'},
+    {thumbnail: data.profile_uri, type: 'video'},
+    {thumbnail: data.profile_uri, type: 'video'},
+    {thumbnail: data.profile_uri, type: 'video'},
+    {thumbnail: data.profile_uri, type: 'video'},
+    {thumbnail: data.profile_uri, type: 'video'},
+    {thumbnail: data.profile_uri, type: 'video'},
+    {thumbnail: data.profile_uri, type: 'video'},
+    {thumbnail: data.profile_uri, type: 'video'},
+  ];
+
+  const follows = [
+    {
+      name: 'follower',
+      number: data.data.follower,
+    },
+    {
+      name: 'following',
+      number: data.data.following,
+    },
+    {
+      name: 'posts',
+      number: data.data.posts,
+    },
+  ];
+
+  useEffect(() => {
+    getAuthor({
+      id: username,
+    }).then(data1 => {
+      set_data(data1.success.Item.public);
+      getFromStorage({
+        key: data1.success.Item.public.info.profile_key,
+        level: 'public',
+      }).then(data3 => set_profile_uri(data3.key));
+    });
+  }, [username]);
+  const body = type => {
+    return (
+      <TouchableOpacity
+        style={styles.bodyCard}
+        onPress={() => navigation.navigate(type.route, {info: data})}>
+        <View style={styles.icon}>
+          <Icon name={type.icon} color={'white'} size={18} />
+        </View>
+        <View>
+          <Text style={styles.object}>{type.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const iconChoose = type => {
+    switch (type) {
+      case 'image':
+        return 'photo';
+      case 'video':
+        return 'play';
+      default:
+      // code block
+    }
+  };
+  const follow = item => {
+    return (
+      <View style={styles.follow}>
+        <Text style={{color: 'white'}}>{item.name}</Text>
+        <View style={styles.number}>
+          <Text style={{color: 'white'}}>{item.number}</Text>
+        </View>
+      </View>
+    );
+  };
+  const renderImage = item => {
+    return (
+      <TouchableOpacity style={{marginTop: moderateScale(20)}}>
+        <Image
+          style={{width: width / 3, height: height / 6}}
+          source={{
+            uri:
+              'https://firebasestorage.googleapis.com/v0/b/story-3a905.appspot.com/o/profilepic%2FSid%2Fprofile.jpg?alt=media&token=c0c3afad-7906-448e-ba8b-81380e658a17',
+            priority: FastImage.priority.normal,
+          }}
+          resizeMode={FastImage.resizeMode.contain}
+        />
+        <View style={{position: 'absolute', marginLeft: moderateScale(20)}}>
+          <Icon name={iconChoose(item.type)} color={'white'} />
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  console.log(data.profile_uri);
+  console.log(data);
+  if (!data.data) {
+    console.log(data);
+    return <ActivityIndicator animating={true} />;
+  } else {
+    return (
+      <ScrollView style={styles.container}>
+        <View style={styles.profileContainer}>
+          <View style={styles.profile}>
+            <Image source={{uri: data.profile_uri}} style={styles.image} />
+          </View>
+          <View>
+            <Text style={styles.name}>{data.name}</Text>
+          </View>
+          <View>
+            <Text style={styles.bio}>biofsvsfv fvsf vsf 'vs vbfvberfbrf'</Text>
+          </View>
+        </View>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          {follows.map(item => follow(item))}
+        </View>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          {contents.map(type => body(type))}
+          <TouchableOpacity
+            style={styles.bodyCard}
+            onPress={() =>
+              Auth.signOut()
+                .then(data => {
+                  console.log(data);
+                  Logout();
+                  navigation.navigate('Signin');
+                })
+                .catch(err => console.log(err))
+            }>
+            <View style={styles.icon}>
+              <Icon name={'sign-out-alt'} color={'white'} size={18} />
+            </View>
+            <View>
+              <Text style={styles.object}>{'Logout'}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={posts}
+          renderItem={({item}) => renderImage(item)}
+          numColumns={3}
+          //onEndReached={() => loadMore()}
+          maxToRenderPerBatch={18}
+          updateCellsBatchingPeriod={100}
+          refreshing={true}
+        />
+      </ScrollView>
+    );
+  }
+};
+
+const mapStateToProps = state => {
+  return {
+    isLogedin: state.auth.isLogedin,
+    isUserFirstTime: state.auth.isUserFirstTime,
+    uid: state.auth.uid,
+    token: state.auth.token,
+    name: state.auth.name,
+    follower: state.auth.follower,
+    following: state.auth.following,
+    post: state.auth.post,
+    profile_uri: state.auth.profile_uri,
+    username: state.auth.username,
+  };
+};
+const mapDispatchToProp = dispatch => ({
+  setUserLoginData: userData => {
+    dispatch(userAuthActions.setUserLoginData(userData));
+  },
+  Logout: () => {
+    dispatch(userAuthActions.Logout());
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProp,
+)(Profile);

@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "831704357588",
+    "firebase_url": "https://story-3a905.firebaseio.com",
+    "project_id": "story-3a905",
+    "storage_bucket": "story-3a905.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831704357588:android:bc9ecf7290d94ff3083941",
+        "android_client_info": {
+          "package_name": "com.humyng"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831704357588-onpo9qrvjl6gfrs9s9rmh2d7e873smsj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.humyng",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcb9weRJz1eVbQiXn8RePwF2Y0Ue896lU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831704357588-5fog5dsbot8t0rd3p1np7p9lsl9e4sk8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831704357588:android:b434c676847fdaa6083941",
+        "android_client_info": {
+          "package_name": "com.staboo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcb9weRJz1eVbQiXn8RePwF2Y0Ue896lU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831704357588-5fog5dsbot8t0rd3p1np7p9lsl9e4sk8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,9 @@
+{
+	"auth": {
+		"humyngae9083d2": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": []
+		}
+	}
+}

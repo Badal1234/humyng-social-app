@@ -1,0 +1,22 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-humyng-dev-235224-authRole",
+            "UnauthRoleArn": "arn:aws:iam::551278939744:role/amplify-humyng-dev-235224-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::551278939744:role/amplify-humyng-dev-235224-authRole",
+            "Region": "ap-south-1",
+            "DeploymentBucketName": "amplify-humyng-dev-235224-deployment",
+            "UnauthRoleName": "amplify-humyng-dev-235224-unauthRole",
+            "StackName": "amplify-humyng-dev-235224",
+            "StackId": "arn:aws:cloudformation:ap-south-1:551278939744:stack/amplify-humyng-dev-235224/cf17bf40-c535-11ea-9092-063f7331dcfe",
+            "AmplifyAppId": "d1y6uragrol935"
+        },
+        "categories": {
+            "auth": {
+                "humyngae9083d2": {
+                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"831704357588-5fog5dsbot8t0rd3p1np7p9lsl9e4sk8.apps.googleusercontent.com\",\"client_secret\":\"ciCMvX5bNBrowisUGMvAm0z9\"}]"
+                }
+            }
+        }
+    }
+}
