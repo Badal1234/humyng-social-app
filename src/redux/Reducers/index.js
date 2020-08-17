@@ -6,6 +6,8 @@ import {persistCombineReducers} from 'redux-persist';
 
 import authReducer from './auth.reducer';
 import fileReducer from './file.reducer';
+import postReducer from './post.reducer';
+import tournamentReducer from './competition.reducer';
 
 const {UCCaccheKeyStore} = Config;
 
@@ -20,6 +22,8 @@ const config = {
 const appReducer = persistCombineReducers(config, {
   auth: authReducer,
   file: fileReducer,
+  post: postReducer,
+  tournament: tournamentReducer,
 });
 
 const rootReducer = (state, action) => {

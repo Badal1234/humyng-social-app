@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, Text, Animated, Image, TouchableOpacity} from 'react-native';
 import {styles} from './styles';
-import ExpandbleView from '@Component/ExpandView';
 const data = [
   {
     position: '1st',
@@ -16,26 +15,56 @@ const data = [
     prize: '15',
   },
 ];
+
 const InfoScreen = () => {
-  const renderPrize = item => {
+  const [textHeight, set_textHeight] = useState(12);
+  const [more, set_status] = useState(true);
+  const renderPrizePool = data => {
     return (
-      <View style={styles.prizeContainer}>
-        <View></View>
-    <Text style={styles.position}>{item.position}</Text>
-       <Text style={styles.position}>{item.prize}</Text>
+      <View>
+        <View>
+          <Text style={styles.prize}>Prize Pool</Text>
+          <Text style={styles.rule}>Prize Rule</Text>
+        </View>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          {data.map(item => renderPrize(item))}
+        </View>
       </View>
     );
   };
+  const renderPrize = item => {
+    return (
+      <View style={styles.prizeContainer}>
+        <View />
+        <Text style={styles.position}>{item.position}</Text>
+        <Text style={styles.position}>{item.prize}</Text>
+      </View>
+    );
+  };
+  const setMore = size => {
+    set_status(!more);
+    set_textHeight(size);
+  };
+  const text = 'This game is made by our developer and gamer friends';
   return (
-    <View>
+    <View style={styles.infoContainer}>
       <View>
         <Text style={styles.title}>Only One Win!</Text>
       </View>
-      <ExpandbleView onLayout={e => console.log(e.nativeEvent.layout.height)}>
+      <View
+        style={styles.data}
+        onLayout={e => console.log(e.nativeEvent.layout.height)}>
         <Text style={styles.description}>
-          cybywvbwfhy vbvefuvbef vubvevfuvbef veub efub vueb eub uvbeufb e
+          {`${text.substring(0, textHeight)}`}
+          {text.length >= 12 ? (
+            <Text
+              style={styles.more}
+              onPress={() => (more ? setMore(text.length) : setMore(12))}>
+              {more ? '...more' : '...less'}
+            </Text>
+          ) : null}
         </Text>
-      </ExpandbleView>
+      </View>
       <TouchableOpacity style={styles.game}>
         <Image style={styles.logo} />
         <TouchableOpacity>
@@ -43,12 +72,14 @@ const InfoScreen = () => {
           <Text style={styles.info}>Download it from GooglePlay</Text>
         </TouchableOpacity>
       </TouchableOpacity>
+      {renderPrizePool(data)}
       <View>
         <View>
-        <Text style={styles.prize}>Prize Pool</Text>
-        <Text style={styles.rule}>Prize Rule</Text>
+          <Text style={styles.prize}>Tournament Rules</Text>
+          <Text style={styles.description}>
+            Each player should play with honesty
+          </Text>
         </View>
-        <View style={{justifyContent:'center',alignItems:'center'}}>{data.map(item => renderPrize(item))}</View>
       </View>
     </View>
   );

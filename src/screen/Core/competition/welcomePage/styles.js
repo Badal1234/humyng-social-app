@@ -132,8 +132,7 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(25),
   },
   description: {
-    color: 'white',
-    opacity: 0.6,
+    color: '#a2afa6',
     fontFamily: light,
   },
   info: {
@@ -146,36 +145,85 @@ export const styles = StyleSheet.create({
   },
   game: {
     flexDirection: 'row',
-    borderBottomColor: LightGrey,
+    borderBottomColor: '#874dc6',
     borderBottomWidth: 0.6,
-    marginTop: moderateScale(10),
-
+    marginTop: moderateScale(20),
+    marginBottom: moderateScale(20),
+    paddingBottom: moderateScale(10),
   },
-  prize:{
-    fontFamily:regular,
-    fontSize:moderateScale(24),
-    color:'white'
+  prize: {
+    fontFamily: regular,
+    fontSize: moderateScale(24),
+    color: 'white',
   },
-  rule:{
+  rule: {
     color: 'white',
     opacity: 0.6,
     fontFamily: light,
   },
-  prizeContainer:{
+  prizeContainer: {
     backgroundColor: '#334761',
-    height:moderateScale(40),
-    marginBottom:moderateScale(5),
-    width:'85%',
-    borderRadius:moderateScale(10),
-    flexDirection:'row',
-    justifyContent:'space-between'
-
+    height: moderateScale(40),
+    marginBottom: moderateScale(5),
+    width: '85%',
+    borderRadius: moderateScale(10),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  position:{
-    color:'white',
-    fontSize:moderateScale(16),
-    marginRight:moderateScale(20),
-    fontFamily:regular
-
-  }
+  position: {
+    color: 'white',
+    fontSize: moderateScale(16),
+    marginRight: moderateScale(20),
+    fontFamily: regular,
+  },
+  data: {
+    flexDirection: 'row',
+    borderBottomColor: '#874dc6',
+    borderWidth: 2,
+    marginTop: moderateScale(5),
+  },
+  more: {
+    color: '#f1f3f2',
+    fontSize: moderateScale(18),
+  },
+  playerName: {
+    color: '#e1e5e2',
+    fontFamily: light,
+  },
+  gameid: {
+    color: '#c0c1bf',
+    fontFamily: light,
+  },
+  playercontainer: {
+    backgroundColor: '#7c42b3',
+    borderRadius: moderateScale(5),
+    borderWidth: 1,
+    shadowColor: 'white',
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 200,
+    shadowOffset: {
+      height: 2,
+      width: 2,
+    },
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: moderateScale(70),
+    width: '90%',
+    marginBottom: moderateScale(20),
+  },
+  icon: {
+    width: moderateScale(50),
+    height: moderateScale(50),
+  },
+  adContainer: {
+    width: moderateScale(width - 50),
+  },
+  infoContainer: {
+    marginLeft: moderateScale(20),
+  },
+  titleContainer: {
+    borderWidth: 2,
+    borderBottomColor: '#874dc6',
+  },
 });

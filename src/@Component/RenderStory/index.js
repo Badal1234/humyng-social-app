@@ -51,96 +51,41 @@ export default function RenderStory() {
   const point = useState(new Value(height))[0];
   const translateX = useState(new Value(0))[0];
 
-  const onPanGestureEvent = useCallback(
-    event(
-      [
-        {
-          nativeEvent: {
-            translationY: translateY,
-            translationX: translateX,
-            y: point,
-          },
-        },
-      ],
-      {
-        useNativeDriver: true,
-      },
-    ),
-    [],
-  );
-
-  const videoHeight = interpolate(add(point, translateY), {
-    inputRange: [height / 2, height - 150],
-    outputRange: [height / 3.5, height - 150],
-    extrapolate: 'clamp',
-  });
-  const absoluteHeight = interpolate(add(point, translateX), {
-    inputRange: [-width, 0, width],
-    outputRange: [-width, width, -width * 2],
-    extrapolate: 'clamp',
-  });
-
   return (
     <View style={[styles.main]}>
-      <View style={[styles.container]}>
-        <View
-          style={{
-            position: 'absolute',
-          }}>
-          <View />
-        </View>
-        <View style={[styles.buttons]}>
-          <TouchableOpacity
+      <ScrollView
+        style={styles.decsc}
+        stickyHeaderIndices={[0]}
+        showsVerticalScrollIndicator={false}>
+        <View style={[styles.container]}>
+          <View
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginLeft: 30,
-              marginRight: moderateScale(100),
+              flexDirection: 'row',
+              paddingTop: moderateScale(5),
+              marginLeft: moderateScale(0),
             }}>
-            <Icon name="heart" size={24} color={'red'} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              justifyContent: 'center',
-              marginRight: moderateScale(100),
-            }}>
-            <Text style={{color: 'white'}}>scroll up</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Icon name={'bookmark'} size={24} color={'white'} />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            paddingTop: moderateScale(5),
-            marginLeft: moderateScale(20),
-          }}>
-          <TouchableOpacity>
-            <Image source={{uri: data.profile_uri}} style={styles.image} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              marginLeft: moderateScale(10),
-              marginRight: moderateScale(140),
-              justifyContent: 'center',
-            }}>
-            <Text style={{color: 'white'}}>name</Text>
-          </TouchableOpacity>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Follow />
+            <TouchableOpacity>
+              <Image source={{uri: data.profile_uri}} style={styles.image} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                marginLeft: moderateScale(10),
+                marginRight: moderateScale(100),
+                justifyContent: 'center',
+              }}>
+              <Text style={{color: 'white'}}>name</Text>
+            </TouchableOpacity>
+            <View style={{}}>
+              <Follow />
+            </View>
+          </View>
+          <View style={{}}>
+            <View>
+              <Text style={styles.title}>My first story</Text>
+              <Text style={styles.time}>1 month ago</Text>
+            </View>
           </View>
         </View>
-        <View style={{width: width}}>
-          <View>
-            <Text style={styles.title}>My first story</Text>
-            <Text style={styles.time}>1 month ago</Text>
-          </View>
-        </View>
-      </View>
-
-      <ScrollView style={styles.decsc}>
         {data.map(item => {
           if (item.type == 'text') {
             return (
@@ -230,11 +175,6 @@ export default function RenderStory() {
           <Comment />
         </View>
       </ScrollView>
-
-      <View style={{width: width * 2}}>
-        <CommentModal visible={visible} setVisible={set_visible} />
-      </View>
-
     </View>
   );
 }

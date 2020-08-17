@@ -14,9 +14,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {styles} from './styles';
 import Config from '@Config/default';
 import Button from '@Component/Button';
-import * as userAuthActions from '@Actions/user.authAction';
+import * as postAction from '@Actions/post.Action';
+import * as userAuthAction from '@Actions/user.authAction';
 import {connect} from 'react-redux';
-import {UploadPost, UpdatePost} from '../../../Api/Post';
 import Modal from 'react-native-modal';
 import {Storage} from 'aws-amplify';
 const {
@@ -35,14 +35,14 @@ const MediaInfo = ({
   username,
   content,
   setContentData,
-  type,
+  UploadPost,
 }) => {
   const path_poster = navigation.getParam('path');
   const file_name = navigation.getParam('name');
   const [title, set_title] = useState('');
   const [desc, set_desc] = useState('');
   const [visible, set_visible] = useState(false);
-  //const [type, set_type] = useState('gg');
+  const [type, set_type] = useState('gg');
   const [loading, set_loading] = useState(false);
 
   const uploadToFirebase = async body => {
@@ -50,14 +50,14 @@ const MediaInfo = ({
     return new Promise(async (resolve, reject) => {
       const response = await fetch(body);
       const blob = await response.blob();
-      console.log(blob);
-      console.log(type);
+      console.log(blob.type);
+      set_type(blob.type);
       Storage.put(`${username}/${blob._data.name}`, blob, {
         level: 'public',
         contentType: blob._data.type,
       })
         .then(result => {
-          resolve(result);
+          resolve({key: result, type: blob.type});
         })
         .catch(err => {
           reject(err);
@@ -73,15 +73,14 @@ const MediaInfo = ({
       if (!path) {
         if (!content) {
           const key = await uploadToFirebase(path_poster);
-          console.log('nn');
-          await UploadPost({
+          UploadPost({
             author: username,
             type: 'image',
             description: desc,
             title: title,
             content: {
               uri: {
-                raw: key,
+                raw: key.key,
               },
             },
           });
@@ -92,11 +91,21 @@ const MediaInfo = ({
           });
           navigation.navigate('EnterScreen');
         } else {
-          const key = await uploadToFirebase(path_poster);
-          await UploadPost({
+          if(path_poster){
+            const key = await uploadToFirebase(path_poster);
+            UploadPost({
+              author: username,
+              type: 'story',
+              poster_uri: {raw: key.key},
+              description: desc,
+              title: title,
+              content: content,
+            });
+          }
+          UploadPost({
             author: username,
             type: 'story',
-            poster_uri: {raw: key},
+            //poster_uri: {raw: key.key},
             description: desc,
             title: title,
             content: content,
@@ -113,22 +122,22 @@ const MediaInfo = ({
         const poster_key = await uploadToFirebase(path_poster);
         const content_key = await uploadToFirebase(path);
         console.log(type);
-        await UploadPost({
+        UploadPost({
           author: username,
-          type: type,
+          type: content_key.type,
           description: desc,
           title: title,
-          poster_uri: poster_key,
+          poster_uri: poster_key.key,
           content: {
-            uri: content_key,
+            uri: content_key.key,
           },
         });
         set_loading(false);
         setContentData({
-          path: null,
           content: null,
+          path: null,
         });
-        navigation.navigate('Enterscreen');
+        navigation.navigate('EnterScreen');
       }
     } catch (error) {
       console.log(error);
@@ -141,7 +150,6 @@ const MediaInfo = ({
       <Image
         source={{
           uri: `${path_poster}`,
-      
         }}
         style={{width: width, height: height / 2}}
         resizeMode={'contain'}
@@ -209,8 +217,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProp = dispatch => ({
-  setContentData: userData =>
-    dispatch(userAuthActions.setContentData(userData)),
+  UploadPost: userData => dispatch(postAction.UploadPost(userData)),
+  setContentData: userData => dispatch(userAuthAction.setContentData(userData)),
 });
 
 export default connect(

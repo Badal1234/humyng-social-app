@@ -10,11 +10,13 @@ const {
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 export const styles = StyleSheet.create({
-  main: {flexDirection: 'column', height: height * 2, backgroundColor: Primary,width:width},
+  main: {flexDirection: 'column',  width: width - 50},
   container: {
-    width: width - moderateScale(0),
+    width: width - 50,
     marginLeft: moderateScale(0),
     borderRadius: moderateScale(20),
+    //marginTop:moderateScale(40)
+    backgroundColor: Primary,
   },
   video: {
     width: width,

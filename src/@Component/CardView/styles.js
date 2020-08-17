@@ -7,10 +7,10 @@ const {
   Colors: {Secondary, Primary},
   font: {PrimaryF, regular, light, extralight},
 } = Config;
+const width = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
   card1: {
-  
     width: '100%',
     backgroundColor: 'white',
     borderRadius: 10,
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     paddingRight: moderateScale(5),
     marginRight: moderateScale(20),
   },
-  icon1:{
+  icon1: {
     height: moderateScale(26),
     width: moderateScale(26),
     borderRadius: moderateScale(13),
@@ -42,8 +42,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: moderateScale(10),
     marginTop: moderateScale(10),
-
-
   },
   iconholder: {
     flexDirection: 'row',
@@ -64,9 +62,10 @@ export const styles = StyleSheet.create({
     width: '91%',
   },
   image: {
-    width: '100%',
+    width: width,
     height: moderateScale(300),
-    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   profile: {
     height: moderateScale(20),
@@ -96,4 +95,45 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  header: {
+    backgroundColor: '#11011a',
+    height: moderateScale(40),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  name: {
+    color: 'white',
+  },
+  time: {
+    color: 'white',
+    opacity: 0.7,
+  },
+  profileImage: {
+    height: moderateScale(50),
+    width: moderateScale(50),
+  },
+  comment: {
+    height: moderateScale(70),
+  },
+  description: {
+    color: '#a2afa6',
+  },
+  more: {
+    color: 'white',
+    fontFamily: regular,
+  },
+  commentpic: {
+    height: moderateScale(20),
+    width: moderateScale(20),
+    borderRadius: moderateScale(10),
+    marginTop: moderateScale(10),
+  },
+  commentBox: {
+    flexDirection: 'row',
+  },
+  story:{
+    color:'white',
+    fontFamily:regular,
+    
+  }
 });

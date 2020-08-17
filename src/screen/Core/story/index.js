@@ -96,7 +96,7 @@ const Story = ({username, navigation, setContentData}) => {
         console.log(item);
         const response = await fetch(item.uri);
         const blob = await response.blob();
-        console.log(blob);
+        console.log(response.formData());
 
         Storage.put(`${username}/${blob._data.name}`, blob, {
           level: 'private',
@@ -333,6 +333,7 @@ const Story = ({username, navigation, setContentData}) => {
     var count = 0;
     var submitContent = [];
     set_loading(true);
+
     await new Promise((resolve, reject) => {
       newArr.map(async (item, index) => {
         if (item.type === 'Insert Attachment') {
@@ -343,7 +344,22 @@ const Story = ({username, navigation, setContentData}) => {
           submitContent.push(item);
         }
         if (submitContent.length === newArr.length) {
-          setContentData({content: submitContent});
+          Storage.put(
+            `${username}#${new Date().toISOString()}.json`,
+            {content: submitContent},
+            {
+              level: 'public',
+              contentType: 'application/json',
+            },
+          )
+            .then(result => {
+              setContentData({content: result});
+            })
+            .catch(err => { 
+              set_loading(false)
+              console.log(err);
+            });
+          
           set_loading(false);
           navigation.navigate('ImagePoster');
         }

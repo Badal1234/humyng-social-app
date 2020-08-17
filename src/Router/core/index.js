@@ -27,18 +27,35 @@ import RecordAudio from '../../screen/Core/RecordAudio';
 import RenderScreen from '../../screen/Core/renderScreen';
 import EditProfile from '../../screen/Core/EditProfile';
 import Localnotify from '../../screen/Core/localnotify';
-import Competition from '../../screen/Core/competition/welcomePage'
+import Competition from '../../screen/Core/competition/welcomePage';
+import RegistartionScreen from '../../screen/Core/competition/Registration';
+import AddName from '../../screen/Core/competition/addName';
+import CompetitionPage from '../../screen/Core/competition/';
+import CommentSection from '../../screen/Core/enterScreen/commentSection';
+import podcastScreen from '../../screen/Core/enterScreen/podcastScreen';
+import ChatRoom from '../../screen/Core/Chat/chatroomScreen/index';
 const TABS = {
   Home: createStackNavigator(
     {
       EnterScreen: {screen: EnterScreen},
+      podcastScreen: {screen: podcastScreen},
     },
     {
       defaultNavigationOptions: {headerShown: false},
     },
   ),
   AddPost: AddPost,
-  Notification: Competition,
+  Notification: createStackNavigator(
+    {
+      Competition: {screen: CompetitionPage},
+      Participant: {screen: Competition},
+      Registration: {screen: RegistartionScreen},
+      AddName: {screen: AddName},
+    },
+    {
+      defaultNavigationOptions: {headerShown: false},
+    },
+  ),
   Search: Notification,
   Bookmark: createStackNavigator(
     {
@@ -104,6 +121,17 @@ export const checkNavConfig = () => {
   return navConfigs;
 };
 
+const chatStack = createStackNavigator(
+  {
+    chatRoom: {screen: ChatRoom},
+  },
+  {
+    defaultNavigationOptions: {
+      headerShown: false,
+    },
+  },
+);
+
 export const _tabNavigator = () => {
   const BottomTab = createBottomTabNavigator(TABS, {
     tabBarComponent: TabBar,
@@ -123,6 +151,8 @@ export const _tabNavigator = () => {
       VideoEditing: {screen: VideoEditing},
       ImagePoster: {screen: ImagePoster},
       RecordAudio: {screen: RecordAudio},
+      CommentSection: {screen: CommentSection},
+      ChatStack: {screen: chatStack},
     },
 
     {

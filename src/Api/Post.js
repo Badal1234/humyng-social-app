@@ -30,18 +30,22 @@ export const UpdatePost = async (body, token) => {
 };
 
 export const getPosts = body => {
-  return API.get('api6ebbf326', '/v1/post/get_item/posts/', {
-    body: body,
+  return dispatch => {
+    console.log(dispatch)
+    dispatch({type: 'POST'});
+    return API.get('api6ebbf326', '/v1/post/get_item/posts/', {
+      body: body,
+      headers: header,
+    })
+      .then(res => dispatch({promise: res}))
+      .catch(err => dispatch({error: err}));
+  };
+};
+
+export const getAuthor = body => {
+  return API.get('api6ebbf326', `/v1/profile/details/${body.id}`, {
     headers: header,
   })
     .then(res => res)
     .catch(err => err);
 };
-
-export const getAuthor = body =>{
-  return API.get('api6ebbf326', `/v1/profile/details/${body.id}`, {
-    headers: header,
-  })
-    .then(res => res)
-    .catch(err => err)
-}

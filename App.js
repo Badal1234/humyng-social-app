@@ -15,6 +15,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import config from './aws-exports';
 import Amplify from 'aws-amplify';
+import PushNotification from 'react-native-push-notification'
 export const reduxPersistStore = persistStore(reduxStore);
 const App = () => {
   useEffect(() => {
@@ -22,6 +23,14 @@ const App = () => {
   }, []);
 
   Amplify.configure(config);
+  PushNotification.configure({
+    // ...
+    onNotification: function (notification) {
+      console.log("NOTIFICATION:", notification);
+    },
+    senderID: "831704357588",
+    // ...
+  });
 
   return (
     <Provider store={reduxStore}>

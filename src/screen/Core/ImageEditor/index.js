@@ -14,7 +14,7 @@ export default function ImageEditor({navigation}) {
         onDone: data => {
           console.log(data);
           navigation.navigate('MediaInfo', {
-            path: `file://${data}`,
+            path: `${data}`,
             type: type,
           });
         },
