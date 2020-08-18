@@ -202,12 +202,6 @@ const Info = ({token, setUserLoginData, navigation}) => {
 
   console.log('sssss')
 
-  Auth.currentAuthenticatedUser()
-    .then(user => {
-      console.log(user)
-      
-    })
-    
 
   const send = async () => {
     set_loading(true);

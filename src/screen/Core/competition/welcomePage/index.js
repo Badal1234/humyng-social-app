@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -13,6 +13,13 @@ import DesignButton from '@Component/designButton';
 import StickyParallaxHeader from '@Component/AnimatedHeader';
 import {styles} from './styles';
 import Config from '@Config/default';
+import PlayerScreen from './players';
+import MatchScreen from './match';
+import {
+  RewardedAd,
+  RewardedAdEventType,
+  TestIds,
+} from '@react-native-firebase/admob';
 const {
   Colors: {LightGrey, DarkGrey, Black, Primary, Secondary},
   font: {PrimaryF, light},
@@ -30,7 +37,37 @@ const text = {
   appearances: 'Appearances',
 };
 
-const CutomHeaderScreen = () => {
+const rewarded = RewardedAd.createForAdRequest(
+  'ca-app-pub-2085032768852939/5690076349',
+  {
+    requestNonPersonalizedAdsOnly: true,
+    keywords: ['fashion', 'clothing'],
+  },
+);
+
+const CutomHeaderScreen = ({navigation}) => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const eventListener = rewarded.onAdEvent((type, error, reward) => {
+      if (type === RewardedAdEventType.LOADED) {
+        setLoaded(true);
+      }
+
+      if (type === RewardedAdEventType.EARNED_REWARD) {
+        console.log('User earned reward of ', reward);
+      }
+    });
+
+    // Start loading the rewarded ad straight away
+    rewarded.load();
+
+    // Unsubscribe from events on unmount
+    return () => {
+      eventListener();
+    };
+  }, []);
+
   const renderContent = x => (
     <View style={styles.contentContiner}>
       <Text style={styles.contentText}>{x}</Text>
@@ -40,11 +77,16 @@ const CutomHeaderScreen = () => {
     return (
       <View style={styles.container2}>
         <View>
-          <DesignButton text={'Participate for 1 ticket'} />
+          <DesignButton
+            text={'Participate for 1 ticket'}
+            onPress={() => navigation.navigate('AddName')}
+          />
         </View>
         <View style={styles.border}>
           <Text style={styles.text}>You have 4 tickets</Text>
-          <Text style={styles.text2}>Buy more ></Text>
+          <Text style={styles.text2} onPress={() => rewarded.show()}>
+            Buy more >
+          </Text>
         </View>
       </View>
     );
@@ -56,7 +98,6 @@ const CutomHeaderScreen = () => {
       backgroundColor={Primary}
       backgroundImage={require('../../../../static/index.jpeg')}
       renderMiddle={renderBody()}
-      
       tabs={[
         {
           title: 'Info',
@@ -64,11 +105,11 @@ const CutomHeaderScreen = () => {
         },
         {
           title: 'Participant',
-          content: renderContent(text.powers),
+          content: <PlayerScreen />,
         },
         {
-          title: 'Matches',
-          content: renderContent(text.appearances),
+          title: 'Winners',
+          content: <MatchScreen />,
         },
       ]}
       tabTextContainerStyle={styles.tabTextContainerStyle}

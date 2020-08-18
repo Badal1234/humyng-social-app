@@ -21,7 +21,7 @@ export default function ImageList({navigation, set_path,set_loading}) {
   const [uri, set_uri] = useState([]);
   const [name, set_name] = useState('');
   const [page, set_page] = useState(1);
-  const [query, set_query] = useState('background');
+  const [query, set_query] = useState('esports');
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
   useEffect(() => {

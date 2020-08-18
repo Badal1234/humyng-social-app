@@ -7,9 +7,10 @@ const {
   font: {PrimaryF, light},
 } = Config;
 const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 export const styles = StyleSheet.create({
   container: {
-    marginTop: moderateScale(2),
+    backgroundColor: Primary,
   },
   feed: {
     fontFamily: PrimaryF,
@@ -28,12 +29,17 @@ export const styles = StyleSheet.create({
     color: 'white',
   },
   modal: {
-    height: moderateScale(120),
-    backgroundColor: 'white',
-    width: width,
-    marginRight: moderateScale(10),
-    paddingTop: moderateScale(5),
-    flexDirection: 'column',
+    width: width-50,
+    backgroundColor: Primary,
+    borderColor: 'white',
+    borderWidth: 2,
+    top: 0,
+    bottom:0,
+    position: 'absolute',
+    height: height-100,
+    borderRadius: moderateScale(20),
+
+    
   },
   close: {
     marginBottom: moderateScale(10),
@@ -52,17 +58,52 @@ export const styles = StyleSheet.create({
   gener: {
     height: moderateScale(500),
     backgroundColor: 'white',
-    width:width,
-    borderWidth:1,
-    borderRadius:moderateScale(30),
-    justifyContent:'center',
-    alignItems:'center',
-
-
+    width: width,
+    borderWidth: 1,
+    borderRadius: moderateScale(30),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  genertext:{
-    fontSize:moderateScale(20),
-    letterSpacing:2,
-    fontFamily:light
-  }
+  genertext: {
+    fontSize: moderateScale(20),
+    letterSpacing: 2,
+    fontFamily: light,
+  },
+  underLine: {
+    backgroundColor: 'white',
+  },
+  tab: {
+    borderBottomColor: Primary,
+    justifyContent: 'space-evenly',
+    width: width,
+    flexDirection: 'row',
+
+    //backgroundColor:'white'
+  },
+  tabText: {},
+  activetabText: {
+    color: 'white',
+    fontFamily: PrimaryF,
+    fontSize: moderateScale(15),
+  },
+  inactivetabtext: {
+    color: 'white',
+    fontFamily: PrimaryF,
+    fontSize: moderateScale(15),
+    opacity: 0.6,
+  },
+  activetab: {
+    borderBottomWidth: 2,
+    borderColor: 'white',
+  },
+  header: {
+    fontFamily: PrimaryF,
+    color: 'white',
+    fontSize: moderateScale(20),
+    marginLeft: moderateScale(20),
+    marginTop: moderateScale(20),
+  },
+  BigStory: {
+   
+  },
 });

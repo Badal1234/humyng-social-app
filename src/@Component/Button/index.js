@@ -19,9 +19,9 @@ const Button = forwardRef((props, ref) => {
   return (
     <TouchableOpacity onPress={onPress} ref={ref} disabled={disabale}>
       <LinearGradient
-        colors={[Primary, Secondary]}
-        end={{x: 0.8, y: 0.5}}
-        start={{x: 0.2, y: 0.8}}
+        colors={['#874dc6', Secondary]}
+        end={{x: 0.8, y: 0.3}}
+        start={{x: 0.3, y: 0.2}}
         style={styles.Button}>
         {indicator ? (
           <ActivityIndicator color="white" style={styles.indicator} />

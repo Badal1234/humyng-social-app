@@ -11,16 +11,16 @@ import {
 import {connect} from 'react-redux';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import * as userAuthActions from '@Actions/user.authAction';
+import * as postActions from '@Actions/post.Action';
 import auth from '@react-native-firebase/auth';
 import {UserDetails} from '../../../Api/Auth';
 const SignIntro = ({
   isLogedIn,
   navigation,
-  setUserLoginData,
   isUserFirstTime,
   uid,
   token,
+  LoadPost,
 }) => {
   useEffect(() => {
     console.log(isLogedIn);
@@ -76,10 +76,12 @@ const mapStateToProps = state => {
     token: state.auth.token,
   };
 };
-const mapDispatchToProp = dispatch => ({
-  setUserLoginData: userData =>
-    dispatch(userAuthActions.setUserLoginData(userData)),
-});
+const mapDispatchToProp = dispatch => {
+  return {
+    LoadPost: userData =>
+      dispatch(postActions.LoadPost(userData)),
+  };
+};
 
 export default connect(
   mapStateToProps,

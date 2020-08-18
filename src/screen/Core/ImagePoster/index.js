@@ -9,7 +9,7 @@ import {
   PanResponder,
   Animated,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import {RNPhotoEditor} from 'react-native-photo-editor';
 import {moderateScale} from 'react-native-size-matters';
@@ -36,28 +36,32 @@ const Imageposter = ({navigation, path}) => {
   const [choose, set_choose] = useState('image');
   const colors = ['#fff', '#fff'];
   const fonts = [PrimaryF, light];
-  const [path_file, set_path] = useState('');
-  const [loading,set_loading] = useState(false)
- 
+  const [path_file, set_path] = useState(null);
+  const [loading, set_loading] = useState(false);
+
   const renderImage = () => {
     return <ImageList set_path={set_path} set_loading={set_loading} />;
   };
   const submit = () => {
-    console.log(path_file)
-    return (
-      <View>
-        {RNPhotoEditor.Edit({
-          path: `${path_file.path}`,
-          onDone: data => {
-            console.log(data);
-            navigation.navigate('MediaInfo',{
-              path: `file://${data}`,
-              name: path_file.name,
-            });
-          },
-        })}
-      </View>
-    );
+    console.log(path_file);
+    if (!path_file) {
+      navigation.navigate('MediaInfo');
+    } else {
+      return (
+        <View>
+          {RNPhotoEditor.Edit({
+            path: `${path_file.path}`,
+            onDone: data => {
+              console.log(data);
+              navigation.navigate('MediaInfo', {
+                path: `file://${data}`,
+                name: path_file.name,
+              });
+            },
+          })}
+        </View>
+      );
+    }
   };
   return (
     <View style={{flex: 1}}>
@@ -72,16 +76,13 @@ const Imageposter = ({navigation, path}) => {
             style={{height: 400, width: width}}
           />
         ) : (
-          <View style={{alignItems:'center'}}>
-             <Icon name={'upload'} size={200} color={LightGrey} />
-             <Text>choose from gallery</Text>
-             <ActivityIndicator animating={loading}/>
-             
+          <View style={{alignItems: 'center'}}>
+            <Icon name={'upload'} size={200} color={LightGrey} />
+            <Text>choose from gallery</Text>
+            <ActivityIndicator animating={loading} />
           </View>
-         
         )}
-        <View
-          style={{position: 'absolute', height: 400, width: width}}>
+        <View style={{position: 'absolute', height: 400, width: width}}>
           <View
             style={{
               height: 400,

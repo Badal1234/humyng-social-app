@@ -11,9 +11,9 @@ function UCButton({onPress, text}) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.button}>
       <LinearGradient
-        colors={['#912d45', Secondary]}
-        end={{x: 0.1, y: 0.9}}
-        start={{x: 0.7, y: 0.7}}
+        colors={['#d02f48', '#714cd1']}
+        end={{x: 0.8, y: 0.9}}
+        start={{x: 0.8, y: 0.9}}
         style={styles.container}>
         <Text style={styles.text}>{text.toUpperCase()}</Text>
       </LinearGradient>

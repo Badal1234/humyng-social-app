@@ -10,11 +10,12 @@ const width = Dimensions.get('window').width;
 export const styles = StyleSheet.create({
   container: {},
   input: {
-    paddingHorizontal: moderateScale(65),
     color: 'white',
-    borderWidth: 0.3,
+    borderWidth: 0.1,
     borderColor: LightGrey,
     borderRadius: moderateScale(30),
+    backgroundColor:'#000',
+    width:width-50
   },
   icon: {
     paddingLeft: moderateScale(10),

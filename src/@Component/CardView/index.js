@@ -6,6 +6,8 @@ import {
   Text,
   Image,
   ImageBackground,
+  TextInput,
+  Animated,
 } from 'react-native';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,18 +24,26 @@ import {moderateScale} from 'react-native-size-matters';
 import {Storage} from 'aws-amplify';
 import Config from '@Config/default';
 import {getAuthor} from '../../Api/Post';
+import {KeyToUri, postTime} from 'utils/service.js';
+import FollowButton from '../FollowButton';
 const {
   Colors: {Secondary, Primary},
   font: {light},
 } = Config;
 
-export default function CardView({data, navigation, index}) {
+export default function CardView({data, navigation, index, type}) {
   const [paused, set_paused] = useState(true);
   const [poster_img, set_poster_img] = useState('');
-  const [img, set_img] = useState('');
   const [video, set_video] = useState('');
   const [audio, set_audio] = useState('');
   const [author, set_author] = useState('');
+  const [textHeight, set_textHeight] = useState(12);
+  const [more, set_status] = useState(true);
+  const [commentHeight, setHeight] = useState(0);
+  const height = useState(new Animated.Value(commentHeight))[0];
+  const [story, set_story] = useState([]);
+  const [img, set_img] = useState('');
+
   var player = useRef();
   const preview = () => {
     setInterval(() => {
@@ -43,84 +53,115 @@ export default function CardView({data, navigation, index}) {
     }, 10000);
   };
 
+  const setMore = size => {
+    set_status(!more);
+  };
+
   useEffect(() => {
     if (type !== 'ad') {
-      getAuthor({
-        id: data.public.author,
-      }).then(data1 => console.log(data1.success.Item.public.info));
     }
   });
 
-  const type = data.type;
+  const commentAnimation = () => {
+    Animated.timing(height, {
+      toValue: 50,
+      duration: 700,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  //console.log(data.type)
 
   const renderImage = data1 => {
-    Storage.get(data.public.content.uri.raw.key, {level: 'public'})
-      .then(result => {
-        set_img(result);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    KeyToUri(data.content.uri.raw.key).then(uri => set_img(uri));
+    console.log(img);
 
     return (
-      <Image
-        source={{
-          uri: img,
-        }}
-        resizeMode={'stretch'}
-        style={styles.image}
-      />
+      <>
+        {renderHeader()}
+        <View
+          onTouchMove={() => commentAnimation()}
+          style={{justifyContent: 'center', alignItems: 'center'}}>
+          <ImageBackground
+            source={{
+              uri: img,
+            }}
+            resizeMode={'stretch'}
+            style={styles.image}>
+            <Icon name={'play'} size={34} color={'white'} />
+          </ImageBackground>
+        </View>
+        {renderIcons()}
+        {renderComment()}
+      </>
     );
   };
 
   const renderStory = data1 => {
-    console.log(data1);
-    Storage.get(data.public.cover_uri.raw.key, {level: 'public'})
-      .then(result => {
-        set_poster_img(result);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (data.cover_uri != null) {
+      KeyToUri(data.cover_uri.key).then(uri => set_poster_img(uri));
+    }
+    KeyToUri(data.content.key)
+      .then(uri => fetch(uri))
+      .then(data3 => data3.json())
+      .then(a => set_story(a.content.content));
 
+    console.log(poster_img);
     return (
-      <Image
-        source={{
-          uri: poster_img,
-        }}
-        resizeMode={'stretch'}
-        style={styles.image}
-      />
+      <>
+        {renderHeader()}
+        <TouchableOpacity
+          onTouchMove={() => commentAnimation()}
+          onPress={() => navigation.navigate('Story', {content: data.content})}>
+          {poster_img ? (
+            <Image
+              source={{
+                uri: poster_img,
+              }}
+              resizeMode={'stretch'}
+              style={styles.image}
+            />
+          ) : null}
+
+          <Text style={styles.story}>Click to read More</Text>
+        </TouchableOpacity>
+        {renderIcons()}
+        {renderComment()}
+      </>
     );
   };
 
-  const renderVideo = uri => {
-    Storage.get(data.public.content.uri.key, {level: 'public'})
-      .then(result => {
-        set_video(result);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  const renderVideo = () => {
+    KeyToUri(data.content.uri.key).then(uri => set_video(uri));
+    KeyToUri(data.cover_uri.key).then(uri => set_poster_img(uri));
 
     return (
-      <Video
-        source={{uri: video}} // Can be a URL or a local file.
-        //ref={vid => (player = vid)}
-        onLoad={() => preview()}
-        style={{
-          height: moderateScale(190),
-          width: '100%',
-          borderRadius: moderateScale(10),
-        }}
-        paused={paused}
-        // onProgress={Progress}
-        // onSeek={data1 => onSeek(data1)}
-        ref={vid => (player = vid)}
-        muted={true}
-        onTouchStart={() => set_paused(!paused)}
-        onTouchMove={() => set_paused(!paused)}
-      />
+      <>
+        {renderHeader()}
+        <View
+          onTouchMove={() => commentAnimation()}
+          onMagicTap={() => set_paused(!paused)}>
+          <Video
+            source={{uri: video}} // Can be a URL or a local file.
+            //ref={vid => (player = vid)}
+            poster={poster_img}
+            style={{
+              height: moderateScale(190),
+              width: '100%',
+              borderRadius: moderateScale(10),
+            }}
+            paused={paused}
+            // onProgress={Progress}
+            // onSeek={data1 => onSeek(data1)}
+            ref={vid => (player = vid)}
+            muted={true}
+            onTouchStart={() => set_paused(!paused)}
+            onTouchMove={() => set_paused(!paused)}
+          />
+        </View>
+        {renderIcons()}
+        {renderComment()}
+      </>
     );
   };
 
@@ -160,17 +201,47 @@ export default function CardView({data, navigation, index}) {
     );
   };
 
-  const renderMedia = data => {
+  const renderMedia = data1 => {
     if (type === 'video') {
-      return renderVideo(data);
+      return renderVideo(data1);
     } else if (type === 'audio') {
       return renderAudio();
     } else if (type === 'image') {
-      return renderImage(data);
-    } else if (type == 'story') {
-      console.log(data.type);
-      return renderStory(data);
+      return renderImage(data1);
+    } else if (type === 'story') {
+      return renderStory(data1);
     }
+  };
+
+  const text = 'fjfjfjfjf jf fj jf  fj fjjjj';
+
+  const renderComment = () => {
+    return (
+      <View>
+        <Text style={styles.description}>
+          {data.title}
+          <Text style={styles.more} onPress={setMore}>
+            {more ? '...more' : null}
+          </Text>
+        </Text>
+        {!more ? (
+          <Text style={styles.description} onPress={setMore}>
+            {data.description}
+            <Text style={styles.more}>...less</Text>
+          </Text>
+        ) : null}
+
+        <Animated.View style={[styles.commentBox, {height: height}]}>
+          <Image style={styles.commentpic} source={{uri: img}} />
+          <View>
+            <TextInput
+              placeholder={'give your comment'}
+              placeholderTextColor={'white'}
+            />
+          </View>
+        </Animated.View>
+      </View>
+    );
   };
 
   const renderAd = () => {
@@ -182,7 +253,7 @@ export default function CardView({data, navigation, index}) {
             width: '100%',
             alignSelf: 'center',
           }}
-          adUnitID="ca-app-pub-2085032768852939/1454879525" // TEST adUnitID
+          adUnitID="ca-app-pub-2085032768852939/4257467377" // TEST adUnitID
         >
           <View
             style={{
@@ -266,7 +337,7 @@ export default function CardView({data, navigation, index}) {
             <Text style={styles.name}>{data.name}</Text>
           </View>
           <View>
-            <Text style={styles.text}>{data.public.description}</Text>
+            <Text style={styles.text}>{'cccc'}</Text>
           </View>
         </View>
         {data.type == 'video' || data.type == 'audio' ? (
@@ -285,24 +356,47 @@ export default function CardView({data, navigation, index}) {
   };
 
   const renderIcons = () => {
+    const like = data.isLike;
     return (
-      <View style={{position: 'absolute', justifyContent: 'center'}}>
+      <View style={{justifyContent: 'center'}}>
         <View style={styles.iconholder}>
-          <View style={styles.icon1}>
-            <Icon name="video-camera" color={'white'} size={14} />
-          </View>
           <TouchableOpacity style={styles.icon} onPress={() => alert('1')}>
             <View style={styles.iconround}>
-              <Icon name="heart" color={'red'} size={15} />
+              <Icon name="heart" color={like ? 'red' : 'white'} size={20} />
             </View>
-            <Text style={styles.num}>{data.public.data.likes}</Text>
+            <Text style={styles.num}>{''}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.icon}>
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={() => navigation.navigate('CommentSection')}>
             <View style={styles.iconround}>
               <Icon name="comment" color={'white'} size={15} />
             </View>
-            <Text style={styles.num}>{data.public.description}</Text>
+            <Text style={styles.num}>{''}</Text>
           </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+  const renderHeader = () => {
+    const time = postTime(data.time);
+
+    return (
+      <View style={styles.header}>
+        <View style={{flexDirection: 'row'}}>
+          <View>
+            <Image style={styles.profileImage} />
+          </View>
+          <TouchableOpacity>
+            <Text style={styles.name}>{data.userInfo.username}</Text>
+            <Text style={styles.time}>{time}</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <FollowButton isFollow={data.isFollow} />
+        </View>
+        <View>
+          <Icon name={'ellipsis-h'} color={'white'} size={24} />
         </View>
       </View>
     );
@@ -314,12 +408,7 @@ export default function CardView({data, navigation, index}) {
         renderAd()
       ) : (
         <View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('RenderScreen', {index: index})}>
-            {renderMedia(data)}
-            {renderIcons()}
-          </TouchableOpacity>
-          {renderInfo(data)}
+          <View>{renderMedia()}</View>
         </View>
       )}
     </View>
