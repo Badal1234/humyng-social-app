@@ -34,6 +34,7 @@ import CompetitionPage from '../../screen/Core/competition/';
 import CommentSection from '../../screen/Core/enterScreen/commentSection';
 import podcastScreen from '../../screen/Core/enterScreen/podcastScreen';
 import ChatRoom from '../../screen/Core/Chat/chatroomScreen/index';
+import EntryScene from '../../screen/Core/Chat/EntryScene/index';
 const TABS = {
   Home: createStackNavigator(
     {
@@ -124,11 +125,13 @@ export const checkNavConfig = () => {
 const chatStack = createStackNavigator(
   {
     chatRoom: {screen: ChatRoom},
+    EntryScene: {screen: EntryScene},
   },
   {
     defaultNavigationOptions: {
       headerShown: false,
     },
+    initialRouteName: 'EntryScene',
   },
 );
 

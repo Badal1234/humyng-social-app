@@ -11,6 +11,7 @@ const initialState = {
   uid: '',
   introScreen: false,
   isUserFirstTime: true,
+  isInfo: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -18,7 +19,7 @@ const authReducer = (state = initialState, action) => {
 
   switch (type) {
     case SET_USER_LOGIN_DATA: {
-      return {...state, introScreen: false, ...userData,isLogedIn:true};
+      return {...state, introScreen: false, ...userData, isLogedIn: true};
     }
 
     case SET_INTRO_SCREEN: {

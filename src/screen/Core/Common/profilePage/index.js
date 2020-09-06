@@ -14,20 +14,23 @@ import {styles} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getAuthor} from '../../../../Api/Post';
 import {getFromStorage} from '../../../../Api/misc';
+import {UserDetails} from '../../../../Api/Auth';
 import * as userAuthActions from '@Actions/user.authAction';
 import {connect} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import {Auth} from 'aws-amplify';
+import {KeyToUri} from '../../../../utils/service'
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-const Profile = ({ navigation, Logout, username}) => {
-  const [data, set_data] = useState({data: {}});
+const Profile = ({navigation, Logout, username}) => {
+  const [data, set_data] = useState();
   const [profile_uri, set_profile_uri] = useState('');
+  const user = navigation.getParam('userId');
   const contents = [
     {
       icon: 'bookmark',
-      name: 'Bookmark',
+      name: 'matches',
     },
     {
       icon: 'edit',
@@ -42,45 +45,30 @@ const Profile = ({ navigation, Logout, username}) => {
   ];
 
   const posts = [
-    {thumbnail: data.profile_uri, type: 'image'},
-    {thumbnail: data.profile_uri, type: 'video'},
-    {thumbnail: data.profile_uri, type: 'video'},
-    {thumbnail: data.profile_uri, type: 'video'},
-    {thumbnail: data.profile_uri, type: 'video'},
-    {thumbnail: data.profile_uri, type: 'video'},
-    {thumbnail: data.profile_uri, type: 'video'},
-    {thumbnail: data.profile_uri, type: 'video'},
-    {thumbnail: data.profile_uri, type: 'video'},
-    {thumbnail: data.profile_uri, type: 'video'},
-    {thumbnail: data.profile_uri, type: 'video'},
+    
+  
   ];
 
   const follows = [
     {
       name: 'follower',
-      number: data.data.follower,
+      number: data?data.follower:null,
     },
     {
       name: 'following',
-      number: data.data.following,
-    },
-    {
-      name: 'posts',
-      number: data.data.posts,
+      number: data?data.following:null,
     },
   ];
 
   useEffect(() => {
-    getAuthor({
-      id: username,
-    }).then(data1 => {
-      set_data(data1.success.Item.public);
-      getFromStorage({
-        key: data1.success.Item.public.info.profile_key,
-        level: 'public',
-      }).then(data3 => set_profile_uri(data3.key));
-    });
-  }, [username]);
+    UserDetails({id: user ? user : username}).then((data)=>set_data(data))
+  }, [user, username]);
+
+  useEffect(()=>{
+ KeyToUri(data?data.profile_key:null).then(uri=>set_profile_uri(uri)).catch(err=>console.l)
+  },[profile_uri])
+
+
   const body = type => {
     return (
       <TouchableOpacity
@@ -134,9 +122,8 @@ const Profile = ({ navigation, Logout, username}) => {
       </TouchableOpacity>
     );
   };
-  console.log(data.profile_uri);
   console.log(data);
-  if (!data.data) {
+  if (!data) {
     console.log(data);
     return <ActivityIndicator animating={true} />;
   } else {
@@ -144,13 +131,13 @@ const Profile = ({ navigation, Logout, username}) => {
       <ScrollView style={styles.container}>
         <View style={styles.profileContainer}>
           <View style={styles.profile}>
-            <Image source={{uri: data.profile_uri}} style={styles.image} />
+            <Image source={{uri:profile_uri}} style={styles.image} />
           </View>
           <View>
-            <Text style={styles.name}>{data.name}</Text>
+            <Text style={styles.name}>{data?data.name:null}</Text>
           </View>
           <View>
-            <Text style={styles.bio}>biofsvsfv fvsf vsf 'vs vbfvberfbrf'</Text>
+    <Text style={styles.bio}>{data?data.Bio:null}</Text>
           </View>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>

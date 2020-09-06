@@ -42,6 +42,7 @@ const Signin = ({navigation, setUserLoginData, username}) => {
           username: user.username,
           userPoolId: user.pool.userPoolId,
           isLogedIn: true,
+          token: user.signInUserSession.accessToken.jwtToken,
         });
         navigation.navigate('EnterScreen');
       });

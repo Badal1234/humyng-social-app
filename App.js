@@ -24,8 +24,11 @@ const App = () => {
 
   Amplify.configure(config);
   PushNotification.configure({
+    onRegister:function(token){
+      console.log('token',token)
+    },
     // ...
-    onNotification: function (notification) {
+    onNotification: function(notification) {
       console.log("NOTIFICATION:", notification);
     },
     senderID: "831704357588",

@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor:'#05010d'
   },
   profileCont: {
     height: moderateScale(230),

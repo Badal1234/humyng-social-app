@@ -37,5 +37,8 @@ export const styles = StyleSheet.create({
     backgroundColor:'#46474f',
     height:moderateScale(60),
     position:'absolute'
+  },
+  option:{
+    backgroundColor:'black'
   }
 });

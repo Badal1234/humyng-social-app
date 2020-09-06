@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, TouchableOpacity, Text, Image} from 'react-native';
 import {styles} from './styles';
 import NativeAdView, {
@@ -11,23 +11,13 @@ import NativeAdView, {
   MediaView,
 } from 'react-native-admob-native-ads';
 import {moderateScale} from 'react-native-size-matters';
+import {getPlayers} from '../../../../Api/tournament';
 
-const players = [
-  {
-    name: 'siddharth padhi',
-    game_id: 'badal_pro',
-  },
-  {
-    name: 'siddharth padhi',
-    game_id: 'badal_pro',
-  },
-  {
-    name: 'siddharth padhi',
-    game_id: 'badal_pro',
-  },
-];
-
-const playerScreen = () => {
+const playerScreen = ({tournament_id}) => {
+  const [players, set_players] = useState([]);
+  useEffect(() => {
+    getPlayers({id: tournament_id}).then(data=>set_players(data.data));
+  }, [tournament_id]);
   const renderPlayers = item => {
     return (
       <TouchableOpacity style={styles.playercontainer}>
@@ -38,7 +28,7 @@ const playerScreen = () => {
           <Text style={styles.playerName}>{item.name}</Text>
         </View>
         <View>
-          <Text style={styles.gameid}>{item.game_id}</Text>
+          <Text style={styles.gameid}>{item.game_username}</Text>
         </View>
       </TouchableOpacity>
     );

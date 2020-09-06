@@ -7,13 +7,16 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
   Linking,
+  Alert,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as postActions from '@Actions/post.Action';
+import * as AuthActions from '@Actions/user.authAction';
 import auth from '@react-native-firebase/auth';
 import {UserDetails} from '../../../Api/Auth';
+import {Auth} from 'aws-amplify';
 const SignIntro = ({
   isLogedIn,
   navigation,
@@ -21,14 +24,35 @@ const SignIntro = ({
   uid,
   token,
   LoadPost,
+  setUserLoginData,
+  isInfo,
 }) => {
   useEffect(() => {
     console.log(isLogedIn);
     console.log(isUserFirstTime);
-    if (isLogedIn) {
+
+    if (isLogedIn && isInfo) {
+      Auth.currentAuthenticatedUser()
+        .then(data =>
+          setUserLoginData({
+            token: data.signInUserSession.accessToken.jwtToken,
+            username: data.username,
+          }),
+        )
+        .catch(() => navigation.navigate('SignIn'));
       navigation.navigate('EnterScreen');
-    } else if (!isLogedIn) {
-      navigation.navigate('SignUp');
+    } else {
+      if (isLogedIn) {
+        Auth.currentAuthenticatedUser().then(data => {
+          setUserLoginData({
+            token: data.signInUserSession.accessToken.jwtToken,
+            username: data.username,
+          });
+          navigation.navigate('Info');
+        });
+      } else {
+        navigation.navigate('SignIn');
+      }
     }
   });
   return (
@@ -53,7 +77,7 @@ const SignIntro = ({
           <Text style={{marginLeft: 15}}>SIGN UP</Text>
           <TouchableOpacity
             style={styles.icon}
-            onPress={() => navigation.navigate('Signup')}>
+            onPress={() => Alert.alert('ss')}>
             <Icon name="chevron-right" size={20} color={'white'} />
           </TouchableOpacity>
         </View>
@@ -74,12 +98,14 @@ const mapStateToProps = state => {
     isUserFirstTime: state.auth.isUserFirstTime,
     uid: state.auth.uid,
     token: state.auth.token,
+    isInfo: state.auth.isInfo,
   };
 };
 const mapDispatchToProp = dispatch => {
   return {
-    LoadPost: userData =>
-      dispatch(postActions.LoadPost(userData)),
+    LoadPost: userData => dispatch(postActions.LoadPost(userData)),
+    setUserLoginData: userData =>
+      dispatch(AuthActions.setUserLoginData(userData)),
   };
 };
 

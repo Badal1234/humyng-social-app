@@ -6,7 +6,7 @@ const {
   Colors: {LightGrey, DarkGrey, Black, Primary, Secondary},
   font: {PrimaryF},
 } = Config;
-
+const width = Dimensions.get('window').width
 export const styles = StyleSheet.create({
   profile: {
     width: moderateScale(80),
@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     marginTop: moderateScale(25),
     borderColor: Secondary,
     marginLeft:moderateScale(20),
-    marginRight:moderateScale(20)
+    marginRight:moderateScale(20),
   },
   container: {
     backgroundColor:'#fff',
@@ -96,4 +96,9 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     color: Secondary,
   },
+  check:{
+    width:width,
+    alignItems:'flex-end',
+    paddingRight:moderateScale(30)
+  }
 });

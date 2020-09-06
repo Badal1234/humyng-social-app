@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   Text,
@@ -7,6 +8,8 @@ import {
   Image,
   Animated,
   StyleSheet,
+  StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import Info from './Info';
 import DesignButton from '@Component/designButton';
@@ -15,11 +18,19 @@ import {styles} from './styles';
 import Config from '@Config/default';
 import PlayerScreen from './players';
 import MatchScreen from './match';
+import RazorpayCheckout from 'react-native-razorpay';
 import {
   RewardedAd,
   RewardedAdEventType,
   TestIds,
 } from '@react-native-firebase/admob';
+import {
+  getDetailsbyId,
+  getPlayers,
+  makeParticipate,
+  createPayment,
+  paymentVerify,
+} from '../../../../Api/tournament';
 const {
   Colors: {LightGrey, DarkGrey, Black, Primary, Secondary},
   font: {PrimaryF, light},
@@ -47,6 +58,10 @@ const rewarded = RewardedAd.createForAdRequest(
 
 const CutomHeaderScreen = ({navigation}) => {
   const [loaded, setLoaded] = useState(false);
+  const [data, set_data] = useState();
+  const [players, set_player] = useState();
+  const [start, set_start] = useState(false);
+  const id = navigation.getParam('id');
 
   useEffect(() => {
     const eventListener = rewarded.onAdEvent((type, error, reward) => {
@@ -68,18 +83,91 @@ const CutomHeaderScreen = ({navigation}) => {
     };
   }, []);
 
-  const renderContent = x => (
-    <View style={styles.contentContiner}>
-      <Text style={styles.contentText}>{x}</Text>
-    </View>
-  );
+  useEffect(() => {
+    getDetailsbyId({id: id})
+      .then(data_tour => set_data(data_tour.data))
+      .catch(err => console.log(err));
+    console.log(data);
+  }, []);
+
+  useEffect(() => {
+    getPlayers({id: id})
+      .then(data_tour => set_players(data_tour))
+      .catch(err => console.log(err));
+    console.log(players);
+  }, []);
+
+  const renderContent = x => {
+    return (
+      <View style={styles.contentContiner}>
+        <Text style={styles.contentText}>{x}chh</Text>
+      </View>
+    );
+  };
+
+ 
+  const checkout = ({order_id, currency, amount}) => {
+    var options = {
+      description: 'Credits towards consultation',
+      image: 'https://i.imgur.com/3g7nmJC.png',
+      currency: currency,
+      key: 'rzp_test_0eAquAvAWKjVly',
+      amount: amount,
+      name: 'Acme Corp',
+      order_id: order_id, //Replace this with an order_id created using Orders API. Learn more at https://razorpay.com/docs/api/orders.
+      prefill: {
+        email: 'gaurav.kumar@example.com',
+        contact: '9191919191',
+        name: 'Gaurav Kumar',
+      },
+      theme: {color: '#53a20e'},
+    };
+    RazorpayCheckout.open(options)
+      .then(data => {
+        // handle success
+        paymentVerify({...data, tournament_id: id})
+          .then(() => {
+            navigation.navigate('AddName',{tournament_id:id})
+
+          })
+          .catch(err => set_start(false));
+      })
+      .catch(error => {
+        set_start(false);
+        // handle failure
+        alert(`Error: ${error.code} | ${error.description}`);
+      });
+  };
+
+  const renderJoin = () => {
+    set_start(true);
+    if (data.prize) {
+      createPayment({id: id}).then(({data}) => {
+        console.log(data);
+        checkout({
+          order_id: data.id,
+          currency: data.currency,
+          amount: data.amount,
+        });
+      });
+    } else {
+      navigation.navigate('AddName',{tournament_id:id})
+    }
+  };
+
   const renderBody = () => {
     return (
       <View style={styles.container2}>
         <View>
+          <Text style={styles.prize}>{data ? data.prize_pool : null}</Text>
+        </View>
+        <View>
           <DesignButton
-            text={'Participate for 1 ticket'}
-            onPress={() => navigation.navigate('AddName')}
+            text1={'paticipate'}
+            text2={'participated'}
+            tournament_id={data ? data.tournament_id : null}
+            status={start}
+            onPress={() => renderJoin()}
           />
         </View>
         <View style={styles.border}>
@@ -93,35 +181,45 @@ const CutomHeaderScreen = ({navigation}) => {
   };
 
   return (
-    <StickyParallaxHeader
-      headerType="TabbedHeader"
-      backgroundColor={Primary}
-      backgroundImage={require('../../../../static/index.jpeg')}
-      renderMiddle={renderBody()}
-      tabs={[
-        {
-          title: 'Info',
-          content: <Info />,
-        },
-        {
-          title: 'Participant',
-          content: <PlayerScreen />,
-        },
-        {
-          title: 'Winners',
-          content: <MatchScreen />,
-        },
-      ]}
-      tabTextContainerStyle={styles.tabTextContainerStyle}
-      tabTextContainerActiveStyle={styles.tabTextContainerActiveStyle}
-      tabTextStyle={styles.tabTextStyle}
-      tabTextActiveStyle={styles.tabTextActiveStyle}
-      tabWrapperStyle={styles.tabWrapperStyle}
-      tabsContainerStyle={styles.tabsContainerStyle}
-      scrollEvent={event([{nativeEvent: {contentOffset: {y: scrollY.y}}}], {
-        useNativeDriver: false,
-      })}
-    />
+    <>
+      <StatusBar backgroundColor={'transparent'} />
+      <ActivityIndicator animating={start} />
+      <StickyParallaxHeader
+        headerType="TabbedHeader"
+        logo={{}}
+        backgroundColor={Primary}
+        backgroundImage={require('../../../../static/index.jpeg')}
+        renderMiddle={renderBody()}
+        title={data ? `${data.name}` : null}
+        renderBody={title => renderContent(title)}
+        
+        tabs={[
+          {
+            title: 'Info',
+            content: <Info info={data} />,
+          },
+          {
+            title: 'Participant',
+            content: (
+              <PlayerScreen tournament_id={data ? data.tournament_id : null} />
+            ),
+          },
+          {
+            title: 'Winners',
+            content: <MatchScreen />,
+          },
+        ]}
+        tabTextContainerStyle={styles.tabTextContainerStyle}
+        tabTextContainerActiveStyle={styles.tabTextContainerActiveStyle}
+        tabTextStyle={styles.tabTextStyle}
+        tabTextActiveStyle={styles.tabTextActiveStyle}
+        tabWrapperStyle={styles.tabWrapperStyle}
+        tabsContainerStyle={styles.tabsContainerStyle}
+        scrollEvent={event([{nativeEvent: {contentOffset: {y: scrollY.y}}}], {
+          useNativeDriver: false,
+        })}
+      />
+    </>
   );
 };
 export default CutomHeaderScreen;

@@ -1,25 +1,21 @@
 import React, {useState} from 'react';
 import {View, Text, Animated, Image, TouchableOpacity} from 'react-native';
+import {moderateScale} from 'react-native-size-matters';
+import NativeAdView, {
+  CallToActionView,
+  IconView,
+  HeadlineView,
+  TaglineView,
+  AdvertiserView,
+  AdBadge,
+  MediaView,
+} from 'react-native-admob-native-ads';
 import {styles} from './styles';
-const data = [
-  {
-    position: '1st',
-    prize: '60',
-  },
-  {
-    position: '2nd',
-    prize: '30',
-  },
-  {
-    position: '3rd',
-    prize: '15',
-  },
-];
 
-const InfoScreen = () => {
+const InfoScreen = ({info}) => {
   const [textHeight, set_textHeight] = useState(12);
   const [more, set_status] = useState(true);
-  const renderPrizePool = data => {
+  const renderPrizePool = prize => {
     return (
       <View>
         <View>
@@ -27,8 +23,56 @@ const InfoScreen = () => {
           <Text style={styles.rule}>Prize Rule</Text>
         </View>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          {data.map(item => renderPrize(item))}
+          {prize.map(item => renderPrize(item))}
         </View>
+      </View>
+    );
+  };
+  const renderAd = () => {
+    return (
+      <View style={styles.Adcontainer}>
+        <NativeAdView
+          style={styles.adContainer}
+          adUnitID="ca-app-pub-2085032768852939/1454879525" // TEST adUnitID
+        >
+          <View style={[{flexDirection: 'row'}]}>
+            <AdBadge
+              style={{
+                marginLeft: moderateScale(5),
+                backgroundColor: 'white',
+              }}
+            />
+            <IconView style={[styles.icon, {marginLeft: moderateScale(20)}]} />
+            <View
+              style={{
+                marginLeft: moderateScale(20),
+                borderWidth: 0.5,
+                borderBottomColor: '#874dc6',
+                width: '90%',
+              }}>
+              <HeadlineView
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: 13,
+                  color: 'white',
+                }}
+              />
+              <TaglineView
+                numberOfLines={1}
+                style={{
+                  fontSize: 7,
+                  color: 'white',
+                }}
+              />
+              <AdvertiserView
+                style={{
+                  fontSize: 10,
+                  color: 'white',
+                }}
+              />
+            </View>
+          </View>
+        </NativeAdView>
       </View>
     );
   };
@@ -36,8 +80,8 @@ const InfoScreen = () => {
     return (
       <View style={styles.prizeContainer}>
         <View />
-        <Text style={styles.position}>{item.position}</Text>
-        <Text style={styles.position}>{item.prize}</Text>
+        <Text style={styles.position}>{item.name}</Text>
+        <Text style={styles.position}>{item.amount}</Text>
       </View>
     );
   };
@@ -45,44 +89,49 @@ const InfoScreen = () => {
     set_status(!more);
     set_textHeight(size);
   };
-  const text = 'This game is made by our developer and gamer friends';
-  return (
-    <View style={styles.infoContainer}>
-      <View>
-        <Text style={styles.title}>Only One Win!</Text>
-      </View>
-      <View
-        style={styles.data}
-        onLayout={e => console.log(e.nativeEvent.layout.height)}>
-        <Text style={styles.description}>
-          {`${text.substring(0, textHeight)}`}
-          {text.length >= 12 ? (
-            <Text
-              style={styles.more}
-              onPress={() => (more ? setMore(text.length) : setMore(12))}>
-              {more ? '...more' : '...less'}
-            </Text>
-          ) : null}
-        </Text>
-      </View>
-      <TouchableOpacity style={styles.game}>
-        <Image style={styles.logo} />
-        <TouchableOpacity>
-          <Text style={styles.info}>Clash Of Clan</Text>
-          <Text style={styles.info}>Download it from GooglePlay</Text>
-        </TouchableOpacity>
-      </TouchableOpacity>
-      {renderPrizePool(data)}
-      <View>
+
+  if (!info) {
+    return <View style={styles.infoContainer} />;
+  } else {
+    console.log(info);
+    const text = info.description;
+    return (
+      <View style={styles.infoContainer}>
         <View>
-          <Text style={styles.prize}>Tournament Rules</Text>
+          <Text style={styles.title}>{info.title}</Text>
+        </View>
+        <View
+          style={styles.data}
+          onLayout={e => console.log(e.nativeEvent.layout.height)}>
           <Text style={styles.description}>
-            Each player should play with honesty
+            {`${text.substring(0, textHeight)}`}
+            {text.length >= 12 ? (
+              <Text
+                style={styles.more}
+                onPress={() => (more ? setMore(text.length) : setMore(12))}>
+                {more ? '...more' : '...less'}
+              </Text>
+            ) : null}
           </Text>
         </View>
+        <TouchableOpacity style={styles.game}>
+          <Image style={styles.logo} />
+          <TouchableOpacity>
+            <Text style={styles.info}>Clash Of Clan</Text>
+            <Text style={styles.info}>Download it from GooglePlay</Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+        {renderAd()}
+        {info.prize ? renderPrizePool(info ? info.tournament_prize : []) : []}
+        <View>
+          <View>
+            <Text style={styles.prize}>Tournament Rules</Text>
+            <Text style={styles.description}>{info.tournament_rule}</Text>
+          </View>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 };
 
 export default InfoScreen;

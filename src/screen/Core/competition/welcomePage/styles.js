@@ -124,7 +124,7 @@ export const styles = StyleSheet.create({
     padding: 10,
   },
   contentText: {
-    fontSize: 16,
+    fontSize: 13,
   },
   title: {
     color: 'white',
@@ -226,4 +226,7 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderBottomColor: '#874dc6',
   },
+  contentText:{
+    fontFamily:regular
+  }
 });

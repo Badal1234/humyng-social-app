@@ -32,6 +32,7 @@ export const Loading = () => {
 };
 
 export const setLoadData = userData => {
+  console.log(userData)
   return {
     type: POST_LOADED,
     userData,

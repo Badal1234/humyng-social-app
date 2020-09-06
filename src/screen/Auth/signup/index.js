@@ -69,7 +69,7 @@ const Signin = ({uid, setUserLoginData, navigation}) => {
       behavior="position"
       keyboardVerticalOffset={20}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TouchableOpacity style={styles.upperButton}>
+        <TouchableOpacity style={styles.upperButton} onPress={()=>navigation.goBack()}>
           <View style={styles.icon}>
             <Icon name="chevron-left" color={'white'} size={20} />
           </View>

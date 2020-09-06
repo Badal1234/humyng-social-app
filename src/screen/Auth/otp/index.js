@@ -22,7 +22,11 @@ const Otp = ({navigation, setUserLoginData}) => {
 
   const final = async () => {
     const user = await Auth.currentAuthenticatedUser();
-    navigation.navigate('Info', {username: user.username});
+    setUserLoginData({
+      token: user.signInUserSession.accessToken.jwtToken,
+      username: user.username,
+    })
+      navigation.navigate('Info', {username: user.username});
   };
 
   const verify = () => {

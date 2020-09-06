@@ -70,8 +70,10 @@ const RegistrationScreen = ({
   });
 
   const submit = async () => {
-    const key = await uploadToFirebase(blob);
-
+    let key;
+    if (blob) {
+     // const key = await uploadToFirebase(blob);
+    }
     RegisterTournament({
       name: name,
       title: title,
@@ -81,13 +83,12 @@ const RegistrationScreen = ({
       prize_pool: prize,
       prize_amount: prizeAmount,
       currency: currency,
-      payment_info: payment_info,
-      prize: [
+      prizeList: [
         {first_prize_name: firstName, first_prize_amount: firstAmount},
         {second_prize_name: secondName, second_prize_amount: secondAmount},
         {third_prize_name: thirdName, third_prize_amount: thirdAmount},
       ],
-      poster_key: key,
+     // poster_key: blob ? key : null,
     });
   };
   console.log(prize);
@@ -116,6 +117,8 @@ const RegistrationScreen = ({
 
   const uploadToFirebase = blob1 => {
     console.log(blob1);
+    console.log('dddd')
+
     return new Promise((resolve, reject) => {
       Storage.put(
         `/competition/${username}/${new Date().toISOString()}.jpeg`,
@@ -129,6 +132,7 @@ const RegistrationScreen = ({
           resolve(result);
         })
         .catch(err => {
+          console.log(err)
           reject(err);
         });
     });
@@ -210,7 +214,6 @@ const RegistrationScreen = ({
             style={[styles.input, {width: moderateScale(120)}]}
             placeholder={'1st Prize Name'}
             placeholderTextColor={'#ddccef'}
-            keyboardType={'numeric'}
             onChangeText={text => set_firstName(text)}
           />
           <TextInput
@@ -221,6 +224,7 @@ const RegistrationScreen = ({
             placeholder={'Prize Amount'}
             placeholderTextColor={'#ddccef'}
             keyboardType={'numeric'}
+            onChangeText={text => setfirstAmount(text)}
           />
         </View>
         <View style={{flexDirection: 'row'}}>
@@ -228,7 +232,7 @@ const RegistrationScreen = ({
             style={[styles.input, {width: moderateScale(120)}]}
             placeholder={'2nd Prize Name '}
             placeholderTextColor={'#ddccef'}
-            keyboardType={'numeric'}
+            onChangeText={text => setsecondName(text)}
           />
           <TextInput
             style={[
@@ -238,6 +242,7 @@ const RegistrationScreen = ({
             placeholder={'Prize Amount'}
             placeholderTextColor={'#ddccef'}
             keyboardType={'numeric'}
+            onChangeText={text => setsecondAmount(text)}
           />
         </View>
         <View style={{flexDirection: 'row'}}>
@@ -245,7 +250,7 @@ const RegistrationScreen = ({
             style={[styles.input, {width: moderateScale(120)}]}
             placeholder={'3rd Prize Name'}
             placeholderTextColor={'#ddccef'}
-            keyboardType={'numeric'}
+            onChangeText={text => setthirdName(text)}
           />
           <TextInput
             style={[
@@ -292,12 +297,12 @@ const RegistrationScreen = ({
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
-    setShow(false);
+    setShow(!show);
     console.log(currentDate);
   };
 
   const showMode = currentMode => {
-    setShow(true);
+    setShow(!show);
     setMode(currentMode);
   };
 

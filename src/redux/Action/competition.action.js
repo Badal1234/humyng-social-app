@@ -4,16 +4,16 @@ import {
   TOURNAMENT_LOAD_FAIL,
   TOURNAMENT_REGISTER_FAIL,
   TOURNAMENT_REGISTER_SUCCESS,
-  TOURNAMENT_REGISTER_LOADING
+  TOURNAMENT_REGISTER_LOADING,
 } from '../Constants/competition.constant';
 import store from '../Store/index';
-import {API} from 'aws-amplify';
+import {API, Auth} from 'aws-amplify';
 let header;
 let info;
+
 store.subscribe(() => {
   header = {
-    username: store.getState().auth.username,
-    userPoolId: store.getState().auth.userPoolId,
+    token: store.getState().auth.token,
   };
   info = {
     // tournamentList: store.getState().tournament.tournamentList,
@@ -57,18 +57,19 @@ export const registerLoad = () => {
   };
 };
 
-export const registerCANCELL = () => {
+export const registerCANCELL = err => {
   return {
     type: TOURNAMENT_REGISTER_FAIL,
+    error: err,
   };
 };
 export const getTournamentList = userData => {
   return dispatch => {
     dispatch(Loading());
-    API.get('api6ebbf326', '/v1/tournament/register/', {
+    API.get('api6ebbf326', '/v1/competition/getList', {
       headers: header,
     })
-      .then(data => dispatch(setLoadData(data)))
+      .then(data => dispatch(setLoadData(data.data)))
       .catch(err => dispatch(cancellLoad(err)));
   };
 };
@@ -76,11 +77,13 @@ export const getTournamentList = userData => {
 export const RegisterTournament = body => {
   return dispatch => {
     dispatch(registerLoad());
-    API.post('api6ebbf326', 'v1/tournament/register/', {
+    console.log(header)
+    console.log(body)
+    API.post('api6ebbf326', '/v1/competition/register/', {
       headers: header,
       body: body,
     })
       .then(() => register())
-      .catch(() => registerCANCELL());
+      .catch(err => console.log('kkk', err));
   };
 };

@@ -11,7 +11,8 @@ const width = Dimensions.get('window').width;
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Primary,
+    backgroundColor:'black'
+    
   },
   input: {
     borderWidth: 1,
@@ -32,22 +33,25 @@ export const styles = StyleSheet.create({
     fontFamily: regular,
   },
   gameWrapper: {
-    height: moderateScale(100),
-    borderWidth: 6,
+    paddingBottom:moderateScale(10),
+    borderWidth: 1,
     borderBottomColor: '#9a00ff',
-    width: moderateScale(width - 50),
-    marginBottom: moderateScale(40),
+    width: moderateScale(width),
+    marginBottom: moderateScale(10),
+    backgroundColor:'#252626',
+    paddingTop:moderateScale(10),
+    paddingLeft:moderateScale(20)
   },
   image: {
-    width: moderateScale(width - 50),
+    width: moderateScale(width-10),
     height: moderateScale(180),
     borderTopLeftRadius: moderateScale(20),
     borderTopRightRadius: moderateScale(20),
   },
   gameText: {
     color: 'white',
-    fontSize: moderateScale(18),
-    fontFamily: regular,
+    fontSize: moderateScale(14),
+    fontFamily: light,
   },
   gameName: {
     color: 'white',
@@ -116,4 +120,8 @@ export const styles = StyleSheet.create({
     fontFamily:regular,
     letterSpacing:1
   },
+  Adcontainer:{
+    backgroundColor:'#823ac5',
+    borderRadius:moderateScale(10)
+  }
 });

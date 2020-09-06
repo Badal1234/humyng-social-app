@@ -34,14 +34,14 @@ const CompetitionReducer = (state = initialState, action) => {
         return {
           ...state,
           isLoading: false,
-          post_data: [...userData],
+          tournamentList: [...userData],
           LastKeyValue: userData.LastKeyValue,
         };
       }
     case TOURNAMENT_LOAD_LOADING:
       return {...state, isLoading: false};
     case TOURNAMENT_REGISTER_FAIL:
-      return {...state, isLoading: false, isError: false};
+      return {...state, isLoading: false, isError: false, error: error};
     case TOURNAMENT_REGISTER_LOADING:
       return {...state, isLoading: true};
     case TOURNAMENT_REGISTER_SUCCESS:

@@ -17,9 +17,11 @@ import DatePicker from 'react-native-date-picker';
 import Button from '@Component/Button';
 import {connect} from 'react-redux';
 import * as userAuthActions from '@Actions/user.authAction';
-import {UserSetup} from '../../../Api/Auth';
+import {UserSetup,checkusername} from '../../../Api/Auth';
 import {Auth, API, Hub, Storage} from 'aws-amplify';
-const Info = ({token, setUserLoginData, navigation}) => {
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { stat } from 'react-native-fs';
+const Info = ({token, setUserLoginData, navigation,username}) => {
   const [uri, set_uri] = useState(null);
   const [visible, set_visible] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -28,6 +30,8 @@ const Info = ({token, setUserLoginData, navigation}) => {
   const [description, set_description] = useState('');
   const [loading, set_loading] = useState(false);
   const [blob, set_blob] = useState(null);
+  const [checked , set_check] = useState(false)
+  const [err,set_err] = useState()
   const options = {
     title: 'Select Avatar',
     customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
@@ -36,7 +40,7 @@ const Info = ({token, setUserLoginData, navigation}) => {
       path: 'images',
     },
   };
-  const username = navigation.navigate('username')
+ 
 
   const chooseGallry = () => {
     ImagePicker.launchImageLibrary(options, response => {
@@ -187,7 +191,7 @@ const Info = ({token, setUserLoginData, navigation}) => {
     console.log(blob1);
     return new Promise((resolve, reject) => {
       Storage.put(`/profile/${username}.jpeg`, blob1, {
-        level: 'protected',
+        level: 'public',
         contentType: 'image/jpeg',
         
       })
@@ -201,28 +205,32 @@ const Info = ({token, setUserLoginData, navigation}) => {
   };
 
   console.log('sssss')
+  const usernameCheck = () => {
+    checkusername({username:name}).then(({status})=>set_check(status)).catch(err=>console.log(err))
+  }
 
 
   const send = async () => {
     set_loading(true);
     const user = await Auth.currentAuthenticatedUser();
-    setUserLoginData({
-      username: user.username,
-      userPoolId: user.pool.userPoolId,
-    });
+
     const filepath = await fetch(blob);
     const file_blob = await filepath.blob();
     console.log(file_blob);
     try {
       const profile_key = await uploadToFirebase(blob);
+      console.log(profile_key)
       UserSetup({
         name: name,
-        description: description,
+        Bio: description,
         profile_key: profile_key,
         dob: date,
       })
         .then((data) => {
-          navigation.navigate('EnterScreen');
+          setUserLoginData({
+            isInfo:true
+          });
+    
         })
         .catch(() => {Alert.alert('Something Wrong try again')
       set_loading(false)});
@@ -245,13 +253,22 @@ const Info = ({token, setUserLoginData, navigation}) => {
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         {showModal(visible)}
       </View>
-      <View>
+      <View >
         <TextInput
           style={styles.input}
           placeholder={'Name'}
-          onChangeText={text => set_name(text)}
+          onChangeText={text => {set_name(text)
+            usernameCheck()
+          }}
         />
+        
       </View>
+      <View style={styles.check}>
+        {checked? <Icon name={'check'}  color={'green'} size={24}/>:err? <Icon name={'times'}  color={'red'} size={24}/>:null}
+     
+
+      </View>
+
       <View>
         <TextInput
           style={styles.input}

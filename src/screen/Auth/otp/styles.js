@@ -48,7 +48,8 @@ marginLeft:moderateScale(10)
     fontWeight:'bold'
   },
   button:{
-    paddingTop:moderateScale(100)
+    paddingTop:moderateScale(100),
+    alignItems:'center'
   },
   input:{
     borderColor:Primary,

@@ -13,15 +13,16 @@ import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-picker';
 import {Storage} from 'aws-amplify';
 import {UserUpdate, UserDetails} from '../../../Api/Auth';
+import LinearGradient from 'react-native-linear-gradient'
 
 import {connect} from 'react-redux';
 import * as userAuthActions from '@Actions/user.authAction';
 const EditProfile = ({navigation, username}) => {
   const data = navigation.getParam('info');
-  const [name, set_name] = useState(data.info.name);
-  const [profile_uri, set_profile_uri] = useState(data.profile_uri);
+  const [name, set_name] = useState('ddd');
+  const [profile_uri, set_profile_uri] = useState('');
   // const [username, set_username] = useState('');
-  const [bio, set_bio] = useState(data.info.description);
+  const [bio, set_bio] = useState(data.info);
   const [interest, set_interest] = useState('');
   const [loading, set_loading] = useState(false);
   const [isVisible, set_visible] = useState(false);
@@ -131,6 +132,9 @@ const EditProfile = ({navigation, username}) => {
 
   return (
     <ScrollView style={styles.container}>
+
+
+
       <View style={styles.profileCont}>
         <TouchableOpacity
           style={styles.profile}
@@ -142,9 +146,10 @@ const EditProfile = ({navigation, username}) => {
         <View style={styles.inputHolder}>
           <TextInput
             style={styles.input}
-            placeholder={'Name'}
+            placeholder={'username'}
             onChangeText={text => set_name(text)}
             defaultValue={name}
+            placeholderTextColor={'white'}
           />
         </View>
         <View style={styles.inputHolder}>

@@ -54,6 +54,7 @@
     "react-native-permissions": "^2.1.5",
     "react-native-photo-editor": "^1.0.6",
     "react-native-push-notification": "^4.0.0",
+    "react-native-razorpay": "^2.2.0",
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^2.0.0",
     "react-native-screens": "^2.8.0",
