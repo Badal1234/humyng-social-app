@@ -1,4 +1,4 @@
-import React, {useEffect, useState,useRef, useReducer} from 'react';
+import React, {useEffect, useState, useRef, useReducer} from 'react';
 import {
   ScrollView,
   View,
@@ -35,8 +35,8 @@ const CompetitionPage = ({
   useEffect(() => {
     getTournamentList();
     console.log(tournamentList);
-  }, []);
-  const image = useRef()
+  }, [getTournamentList, tournamentList]);
+  const image = useRef();
   const data = [
     {
       time: new Date(),
@@ -69,7 +69,6 @@ const CompetitionPage = ({
       profile: '',
     },
   ];
- 
 
   const onRefresh = () => {
     if (isLoading) {
@@ -86,17 +85,18 @@ const CompetitionPage = ({
         onPress={() =>
           navigation.navigate('Participant', {id: item.tournament_id})
         }>
-          <LinearGradient locations={[0,1]} colors= {['rgba(0,0,0,0.00)', 'rgba(0,0,0,0.80)']} style={styles.image}>
+        <LinearGradient
+          locations={[0, 1]}
+          colors={['rgba(0,0,0,0.00)', 'rgba(0,0,0,0.80)']}
+          style={styles.image}>
           <Image
-          style={styles.image}
-          source={{
-            uri:
-              'https://www.telegraph.co.uk/content/dam/gaming/2017/09/26/League-of-Legends-Worlds-Image_trans_NvBQzQNjv4BqNJjoeBT78QIaYdkJdEY4CnGTJFJS74MYhNY6w3GNbO8.jpg?imwidth=450',
-          }}
-        />  
-
-          </LinearGradient>
-
+            style={styles.image}
+            source={{
+              uri:
+                'https://www.telegraph.co.uk/content/dam/gaming/2017/09/26/League-of-Legends-Worlds-Image_trans_NvBQzQNjv4BqNJjoeBT78QIaYdkJdEY4CnGTJFJS74MYhNY6w3GNbO8.jpg?imwidth=450',
+            }}
+          />
+        </LinearGradient>
 
         <View style={styles.gameWrapper}>
           <Text style={styles.timeText}>{timeFormat(item.time)}</Text>
@@ -113,11 +113,13 @@ const CompetitionPage = ({
           style={styles.adContainer}
           adUnitID="ca-app-pub-2085032768852939/1539246216" // TEST adUnitID
         >
-          <View style={{justifyContent:'center',alignItems:'center'}}>
-          <MediaView style={{width:200,height:200}}/>
-
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <MediaView
+            
+              style={{width: 400, height: 200, borderRadius: moderateScale(20)}}
+            />
           </View>
-     
+
           <View style={[{flexDirection: 'row'}]}>
             <AdBadge
               style={{

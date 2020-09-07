@@ -25,7 +25,7 @@ class TabImages extends Component {
           return (
             <Icon
               adjustsFontSizeToFit={true}
-              color={Primary}
+              color={'white'}
               name="home"
               size={20}
             />
@@ -34,7 +34,7 @@ class TabImages extends Component {
         return (
           <Icon
             adjustsFontSizeToFit={true}
-            color={'#000'}
+            color={'#565857'}
             name="camera"
             size={20}
           />
@@ -68,7 +68,7 @@ class TabImages extends Component {
         }
         return (
           <View>
-            <Icon adjustsFontSizeToFit={true} name="bell" size={20} />
+            <Icon adjustsFontSizeToFit={true} name="bell" size={20} color={'#565857'}/>
           </View>
         );
     }

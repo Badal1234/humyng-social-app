@@ -13,17 +13,10 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import Button from '@Component/Button';
-import AsyncStorage from '@react-native-community/async-storage';
 import * as userAuthActions from '@Actions/user.authAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import auth from '@react-native-firebase/auth';
 import {styles} from './styles';
 import Amplify, {Auth, API, Hub} from 'aws-amplify';
-import {
-  GoogleSignin,
-  statusCodes,
-  GoogleSigninButton,
-} from '@react-native-community/google-signin';
 const Signin = ({uid, setUserLoginData, navigation}) => {
   var submit = useRef();
 
@@ -47,11 +40,6 @@ const Signin = ({uid, setUserLoginData, navigation}) => {
         password: pass,
       });
     });
-  };
-
-  const googleSignin = () => {
-    set_run(true);
-    Auth.federatedSignIn({provider: 'Google'}).then(data => console.log(data));
   };
 
   function ValidateEmail(mail) {
@@ -122,12 +110,6 @@ const Signin = ({uid, setUserLoginData, navigation}) => {
             ref={input => (submit = input)}
           />
         </TouchableOpacity>
-        <GoogleSigninButton
-          style={styles.googleButton}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={googleSignin}
-        />
       </ScrollView>
     </View>
   );

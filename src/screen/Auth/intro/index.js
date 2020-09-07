@@ -14,8 +14,6 @@ import {styles} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as postActions from '@Actions/post.Action';
 import * as AuthActions from '@Actions/user.authAction';
-import auth from '@react-native-firebase/auth';
-import {UserDetails} from '../../../Api/Auth';
 import {Auth} from 'aws-amplify';
 const SignIntro = ({
   isLogedIn,
@@ -40,7 +38,7 @@ const SignIntro = ({
           }),
         )
         .catch(() => navigation.navigate('SignIn'));
-      navigation.navigate('EnterScreen');
+      navigation.navigate('CoreStack');
     } else {
       if (isLogedIn) {
         Auth.currentAuthenticatedUser().then(data => {

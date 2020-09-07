@@ -17,7 +17,6 @@ import {getFromStorage} from '../../../../Api/misc';
 import {UserDetails} from '../../../../Api/Auth';
 import * as userAuthActions from '@Actions/user.authAction';
 import {connect} from 'react-redux';
-import FastImage from 'react-native-fast-image';
 import {Auth} from 'aws-amplify';
 import {KeyToUri} from '../../../../utils/service'
 const width = Dimensions.get('window').width;
@@ -84,16 +83,7 @@ const Profile = ({navigation, Logout, username}) => {
     );
   };
 
-  const iconChoose = type => {
-    switch (type) {
-      case 'image':
-        return 'photo';
-      case 'video':
-        return 'play';
-      default:
-      // code block
-    }
-  };
+
   const follow = item => {
     return (
       <View style={styles.follow}>
@@ -104,24 +94,7 @@ const Profile = ({navigation, Logout, username}) => {
       </View>
     );
   };
-  const renderImage = item => {
-    return (
-      <TouchableOpacity style={{marginTop: moderateScale(20)}}>
-        <Image
-          style={{width: width / 3, height: height / 6}}
-          source={{
-            uri:
-              'https://firebasestorage.googleapis.com/v0/b/story-3a905.appspot.com/o/profilepic%2FSid%2Fprofile.jpg?alt=media&token=c0c3afad-7906-448e-ba8b-81380e658a17',
-            priority: FastImage.priority.normal,
-          }}
-          resizeMode={FastImage.resizeMode.contain}
-        />
-        <View style={{position: 'absolute', marginLeft: moderateScale(20)}}>
-          <Icon name={iconChoose(item.type)} color={'white'} />
-        </View>
-      </TouchableOpacity>
-    );
-  };
+
   console.log(data);
   if (!data) {
     console.log(data);
@@ -165,15 +138,7 @@ const Profile = ({navigation, Logout, username}) => {
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          data={posts}
-          renderItem={({item}) => renderImage(item)}
-          numColumns={3}
-          //onEndReached={() => loadMore()}
-          maxToRenderPerBatch={18}
-          updateCellsBatchingPeriod={100}
-          refreshing={true}
-        />
+
       </ScrollView>
     );
   }

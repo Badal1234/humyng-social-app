@@ -11,16 +11,11 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from '@react-native-community/google-signin';
-import auth from '@react-native-firebase/auth';
+
 import * as userAuthActions from '@Actions/user.authAction';
 import Button1 from '@Component/Button';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import Amplify, {Auth, API, Hub} from 'aws-amplify';
 import {styles} from './styles';
 const Signin = ({navigation, setUserLoginData, username}) => {
@@ -121,7 +116,7 @@ const Signin = ({navigation, setUserLoginData, username}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.submit}>
-          <Button1 text={'SIGN in'} ref={submit} onPress={() => login()} />
+          <Button1 text={'SIGNin'} ref={submit} onPress={() => login()} />
         </View>
         <View style={styles.lower}>
           <View>
