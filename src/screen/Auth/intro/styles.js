@@ -3,7 +3,7 @@ import {moderateScale} from 'react-native-size-matters';
 import Config from '@Config/default';
 const {
   Colors: {LightGrey, DarkGrey, Black, Primary},
-  font: {PrimaryF, light},
+  font: {PrimaryF, light,galada,quicksand,danceScript},
 } = Config;
 const height = Dimensions.get('screen').height;
 export const styles = StyleSheet.create({
@@ -62,5 +62,16 @@ export const styles = StyleSheet.create({
   },
   bottom: {
     marginTop: moderateScale(height / 2),
+  },
+  gradientStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  textStyle: {
+    color: '#fff',
+    fontSize: moderateScale(40),
+    fontWeight: '500',
+    fontFamily:danceScript
   },
 });

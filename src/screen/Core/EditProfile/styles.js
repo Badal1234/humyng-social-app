@@ -28,8 +28,9 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(40),
   },
   input: {
-    borderBottomColor: Secondary,
+    borderBottomColor: 'white',
     borderBottomWidth: 1,
+    color:'white'
   },
   inputHolder:{
       margin:moderateScale(20)

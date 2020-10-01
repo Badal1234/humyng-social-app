@@ -16,23 +16,16 @@ import NativeAdView, {
   AdBadge,
   MediaView,
 } from 'react-native-admob-native-ads';
-import {
-  RewardedAd,
-  RewardedAdEventType,
-  TestIds,
-} from '@react-native-firebase/admob';
 import { makeParticipate} from '../../../Api/tournament';
+import { InterstitialAd, TestIds, AdEventType } from '@react-native-firebase/admob';
+const interstitial = InterstitialAd.createForAdRequest('ca-app-pub-2085032768852939/1056294781', {
+  requestNonPersonalizedAdsOnly: true,
+});
 
 const AddName = ({navigation}) => {
   const [loaded, setLoaded] = useState(false);
   const [name , set_name] = useState('')
-  const rewarded = RewardedAd.createForAdRequest(
-    'ca-app-pub-2085032768852939/5690076349',
-    {
-      requestNonPersonalizedAdsOnly: true,
-      keywords: ['fashion', 'clothing'],
-    },
-  );
+
   const renderAd = () => {
     return (
       <View style={styles.Adcontainer}>
@@ -82,30 +75,13 @@ const AddName = ({navigation}) => {
     );
   };
   const tournament_id = navigation.getParam('tournament_id')
-  useEffect(() => {
-    const eventListener = rewarded.onAdEvent((type, error, reward) => {
-      if (type === RewardedAdEventType.LOADED) {
-        setLoaded(true);
-      }
 
-      if (type === RewardedAdEventType.EARNED_REWARD) {
-        console.log('User earned reward of ', reward);
-        navigation.navigate('Competition')
-      }
-    });
-    // Start loading the rewarded ad straight away
-    rewarded.load();
-
-    // Unsubscribe from events on unmount
-    return () => {
-      eventListener();
-    };
-  }, [rewarded]);
 
   const participate = () => {
     makeParticipate({tournament_id: tournament_id,game_username:name})
     .then(() => {
       console.log('participated');
+      interstitial.show() 
       navigation.goBack()
      
     })
@@ -115,7 +91,24 @@ const AddName = ({navigation}) => {
       console.log(err);
     });
   }
+  useEffect(() => {
+    const eventListener = interstitial.onAdEvent(type => {
+      if (type === AdEventType.LOADED) {
+        setLoaded(true);
+      }
+    });
 
+    // Start loading the interstitial straight away
+    interstitial.load();
+
+    // Unsubscribe from events on unmount
+    return () => {
+      eventListener();
+    };
+  }, []);
+
+  // No advert ready to show yet
+ 
 
 
   return (

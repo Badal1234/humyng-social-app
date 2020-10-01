@@ -228,5 +228,14 @@ export const styles = StyleSheet.create({
   },
   contentText:{
     fontFamily:regular
+  },
+  url: {
+    color: 'red',
+    textDecorationLine: 'underline',
+  },
+  header:{
+    height:moderateScale(120),
+    backgroundColor:Primary,
+
   }
 });

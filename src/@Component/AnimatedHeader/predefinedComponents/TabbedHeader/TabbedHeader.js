@@ -102,9 +102,7 @@ export default class TabbedHeader extends React.Component {
     });
 
     const renderImage = () => {
-      const logo = isUndefined(foregroundImage)
-        ? require('../../assets/images/photosPortraitMe.png')
-        : foregroundImage;
+      const logo = foregroundImage;
 
       if (foregroundImage !== null) {
         return (
@@ -121,7 +119,7 @@ export default class TabbedHeader extends React.Component {
     return (
       <View style={styles.foreground}>
         {renderImage()}
-        
+
         <Animated.View
           style={[styles.messageContainer, {opacity: titleOpacity}]}>
           <Text style={messageStyle}>{title}</Text>

@@ -15,23 +15,29 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import config from './aws-exports';
 import Amplify from 'aws-amplify';
-import PushNotification from 'react-native-push-notification'
+import PushNotification from 'react-native-push-notification';
+import AsyncStorage from '@react-native-community/async-storage';
 export const reduxPersistStore = persistStore(reduxStore);
 const App = () => {
   useEffect(() => {
     console.disableYellowBox = true;
   }, []);
-
   Amplify.configure(config);
   PushNotification.configure({
-    onRegister:function(token){
-      console.log('token',token)
+    onRegister: function(token) {
+      console.log('token1', token);
+      AsyncStorage.setItem('fcmToken', token?.token).then(data =>
+        console.log('successfully saved'),
+      );
     },
     // ...
     onNotification: function(notification) {
-      console.log("NOTIFICATION:", notification);
+      console.log('NOTIFICATION:', notification);
     },
-    senderID: "831704357588",
+    senderID: '831704357588',
+    popInitialNotification: true,
+    requestPermissions: true,
+
     // ...
   });
 

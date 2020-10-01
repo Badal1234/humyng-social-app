@@ -6,11 +6,11 @@ import {
   TOURNAMENT_REGISTER_SUCCESS,
   TOURNAMENT_REGISTER_LOADING,
 } from '../Constants/competition.constant';
-import store from '../Store/index';
 import {API, Auth} from 'aws-amplify';
 let header;
 let info;
-
+import store from '../Store/index';
+let token = store.getState().auth.token;
 store.subscribe(() => {
   header = {
     token: store.getState().auth.token,
@@ -64,10 +64,13 @@ export const registerCANCELL = err => {
   };
 };
 export const getTournamentList = userData => {
+  Auth.currentAuthenticatedUser().then(
+    data => (token = data.signInUserSession.accessToken.jwtToken),
+  );
   return dispatch => {
     dispatch(Loading());
     API.get('api6ebbf326', '/v1/competition/getList', {
-      headers: header,
+      headers: {token: token},
     })
       .then(data => dispatch(setLoadData(data.data)))
       .catch(err => dispatch(cancellLoad(err)));
@@ -75,12 +78,15 @@ export const getTournamentList = userData => {
 };
 
 export const RegisterTournament = body => {
+  Auth.currentAuthenticatedUser().then(
+    data => (token = data.signInUserSession.accessToken.jwtToken),
+  );
   return dispatch => {
     dispatch(registerLoad());
     console.log(header)
     console.log(body)
     API.post('api6ebbf326', '/v1/competition/register/', {
-      headers: header,
+      headers: {token: token},
       body: body,
     })
       .then(() => register())

@@ -8,8 +8,7 @@ const matches = [
 const matchScreen = () =>{
     return(
         <View>
-
-
+            
         </View>
     )
 }

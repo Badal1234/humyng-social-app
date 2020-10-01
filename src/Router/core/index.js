@@ -13,6 +13,10 @@ import AddName from '../../screen/Core/competition/addName';
 import CompetitionPage from '../../screen/Core/competition/';
 import ChatRoom from '../../screen/Core/Chat/chatroomScreen/index';
 import EntryScene from '../../screen/Core/Chat/EntryScene/index';
+import NewChat from '../../screen/Core/Chat/chatroomScreen/newChat/index';
+import WalletScreen from '../../screen/Core/wallet/index';
+import AddMoney from '../../screen/Core/wallet/addMoney';
+import Complain from '../../screen/Core/mislenious/complaint';
 const TABS = {
   Notification: createStackNavigator(
     {
@@ -27,8 +31,8 @@ const TABS = {
   ),
   Search: createStackNavigator(
     {
-      chatRoom: {screen: ChatRoom},
       EntryScene: {screen: EntryScene},
+      NewChat: {screen: NewChat},
     },
     {
       defaultNavigationOptions: {
@@ -41,6 +45,8 @@ const TABS = {
     {
       ProfilePage: {screen: ProfilePage},
       EditProfile: {screen: EditProfile},
+      WalletScreen: {screen: WalletScreen},
+      AddMoney: {screen: AddMoney},
     },
     {
       defaultNavigationOptions: {headerShown: false},
@@ -103,7 +109,6 @@ export const checkNavConfig = () => {
 
 export const chatStack = createStackNavigator(
   {
-    chatRoom: {screen: ChatRoom},
     EntryScene: {screen: EntryScene},
   },
   {
@@ -119,6 +124,8 @@ export const _tabNavigator = () => {
   return createStackNavigator(
     {
       Bottom: {screen: BottomTab},
+      chatRoom: {screen: ChatRoom},
+      complain: {screen: Complain},
     },
 
     {

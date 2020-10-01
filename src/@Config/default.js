@@ -20,7 +20,7 @@ export default {
   } ;  Build/)`,
 
   Colors: {
-    Primary: '#0a0a28',
+    Primary: '#1b0f23',
     Secondary: '#161669',
     Black: '#131313',
     DarkGrey: '#696969',

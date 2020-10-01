@@ -43,7 +43,7 @@ const RenderContent = ({ title }) => {
       <Text style={styles.contentText}>{title}</Text>
       {users.map(
         (user) =>
-          (title === 'Popular Quizes' || title === user.type) && (
+          (title === '' || title === user.type) && (
             <QuizListElement
               key={JSON.stringify(user)}
               elements={user.cardsAmount}

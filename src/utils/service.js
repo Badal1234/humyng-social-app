@@ -12,10 +12,9 @@ export const KeyToUri = key => {
   });
 };
 
-export const KeyToData = Key =>{
-  return new Promise((resolve,reject)=>{
-  })
-}
+export const KeyToData = Key => {
+  return new Promise((resolve, reject) => {});
+};
 
 export const postTime = time => {
   const now = new Date();
@@ -35,21 +34,72 @@ export const postTime = time => {
   }
 };
 
-export const timeFormat = (time) => {
+export const timeFormat = time => {
   const now = new Date();
   const timeGiven = new Date(time);
   const yearDifference = now.getFullYear() - timeGiven.getFullYear();
   const MonthDifference = now.getMonth() - timeGiven.getMonth();
   const DateDifference = now.getDate() - timeGiven.getDate();
-  const months = ['Jan','Feb','March','Apr','may','Jun','July','Aug','Sept','Oct','Nov','Dec']
+  const months = [
+    'Jan',
+    'Feb',
+    'March',
+    'Apr',
+    'may',
+    'Jun',
+    'July',
+    'Aug',
+    'Sept',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
-  if(DateDifference == 0){
-    return `Today at ${timeGiven.getHours()+1} : ${timeGiven.getMinutes()+1} `
-  }  else if(DateDifference == 0){
-    return `Tommorow at ${timeGiven.getHours()+1} : ${timeGiven.getMinutes()+1} `
-   } else if(DateDifference == 0){
-    return `${timeGiven.getDate()} - ${months[timeGiven.getMonth()]} - ${timeGiven.getFullYear()} at ${timeGiven.getHours()+1} : ${timeGiven.getMinutes()+1} `
+  if (DateDifference == 0) {
+    return `Today at ${timeGiven.getHours() + 1} : ${timeGiven.getMinutes() +
+      1} `;
+  } else if (DateDifference == 0) {
+    return `Tommorow at ${timeGiven.getHours() + 1} : ${timeGiven.getMinutes() +
+      1} `;
+  } else if (DateDifference == 0) {
+    return `${timeGiven.getDate()} - ${
+      months[timeGiven.getMonth()]
+    } - ${timeGiven.getFullYear()} at ${timeGiven.getHours() +
+      1} : ${timeGiven.getMinutes() + 1} `;
   }
+};
+
+export const messageTime = time => {
+  const now = new Date();
+  const timeGiven = new Date(time);
+
+  const yearDifference = now.getFullYear() - timeGiven.getFullYear();
+  const MonthDifference = now.getMonth() - timeGiven.getMonth();
+  const DateDifference = now.getDate() - timeGiven.getDate();
+  const HourDifference = now.getHours() - timeGiven.getHours();
+  const months = [
+    'Jan',
+    'Feb',
+    'March',
+    'Apr',
+    'may',
+    'Jun',
+    'July',
+    'Aug',
+    'Sept',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const week = ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  if (yearDifference) {
+    return `${yearDifference} years ago`;
+  } else if (MonthDifference) {
+    return `${months[timeGiven.getMonth()]} ${timeGiven.getDate()}`;
+  } else if (DateDifference) {
+    return `${week[timeGiven.getDay()]}`;
+  } else {
+    return `${timeGiven.getHours()}:${timeGiven.getMinutes()}`;
   }
-
-
+};

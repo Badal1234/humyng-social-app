@@ -35,7 +35,7 @@ const CompetitionPage = ({
   useEffect(() => {
     getTournamentList();
     console.log(tournamentList);
-  }, [getTournamentList, tournamentList]);
+  },[]);
   const image = useRef();
   const data = [
     {
@@ -111,14 +111,8 @@ const CompetitionPage = ({
       <View style={styles.Adcontainer}>
         <NativeAdView
           style={styles.adContainer}
-          adUnitID="ca-app-pub-2085032768852939/1539246216" // TEST adUnitID
+          adUnitID="ca-app-pub-2085032768852939/1454879525" // TEST adUnitID
         >
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <MediaView
-            
-              style={{width: 400, height: 200, borderRadius: moderateScale(20)}}
-            />
-          </View>
 
           <View style={[{flexDirection: 'row'}]}>
             <AdBadge
@@ -170,7 +164,7 @@ const CompetitionPage = ({
         }>
         {renderAd()}
         {!tournamentList.length ? (
-          <Text>Np Game available</Text>
+          <Text>No Game available</Text>
         ) : (
           <ActivityIndicator animating />
         )}
@@ -194,7 +188,7 @@ const CompetitionPage = ({
                 <Icon name={'search'} color={'white'} size={14} />
               </View>
 
-              <TextInput focusable={false} style={styles.inputbar} />
+              <TextInput focusable ={false} style={styles.inputbar} />
             </View>
             <TouchableOpacity
               style={styles.host}
@@ -204,7 +198,7 @@ const CompetitionPage = ({
           </View>
           {renderAd()}
           <View>
-            <Text style={styles.header1}>Today</Text>
+            <Text style={styles.header1}>Tournaments</Text>
             <View>{tournamentList.map(item => renderGame(item))}</View>
           </View>
           <View />

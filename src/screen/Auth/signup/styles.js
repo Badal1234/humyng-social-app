@@ -1,11 +1,11 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet,Dimensions} from 'react-native';
 import {scale, moderateScale} from 'react-native-size-matters';
 import Config from '@Config/default';
 const {
   Colors: {LightGrey, DarkGrey, Black, Primary},
   font: {PrimaryF},
 } = Config;
-
+const width = Dimensions.get('window').width
 export const styles = StyleSheet.create({
   upperButton: {
     flexDirection: 'row',
@@ -30,10 +30,13 @@ export const styles = StyleSheet.create({
     letterSpacing: 1,
     paddingTop: moderateScale(30),
     fontFamily: PrimaryF,
+    color:'white'
   },
   container: {
     paddingLeft: moderateScale(20),
     paddingRight: moderateScale(20),
+    backgroundColor: Primary,
+    flex: 1,
   },
   text3: {
     fontSize: 15,
@@ -41,6 +44,7 @@ export const styles = StyleSheet.create({
     letterSpacing: 1,
     paddingTop: moderateScale(20),
     fontFamily: PrimaryF,
+    color:'white'
   },
   text4: {
     fontSize: 15,
@@ -52,6 +56,7 @@ export const styles = StyleSheet.create({
   textInput: {
     borderBottomWidth: 0.3,
     paddingTop: moderateScale(30),
+    borderBottomColor: 'white',
   },
   inputContainer: {
     paddingTop: moderateScale(10),
@@ -73,6 +78,15 @@ export const styles = StyleSheet.create({
   },
   googleButton: {
     marginTop: moderateScale(20),
-    padding:moderateScale(10)
+    padding: moderateScale(10),
   },
+  modal:{
+    right: 0,
+    bottom: 0,
+    position: 'absolute',
+    height: 60,
+    width: width,
+    backgroundColor: 'white',
+  }
 });
+

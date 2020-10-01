@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Animated, Image, TouchableOpacity} from 'react-native';
 import {moderateScale} from 'react-native-size-matters';
+import ParsedText from 'react-native-parsed-text';
 import NativeAdView, {
   CallToActionView,
   IconView,
@@ -90,6 +91,10 @@ const InfoScreen = ({info}) => {
     set_textHeight(size);
   };
 
+  const handleUrlPress = () => {
+    
+  }
+
   if (!info) {
     return <View style={styles.infoContainer} />;
   } else {
@@ -103,7 +108,9 @@ const InfoScreen = ({info}) => {
         <View
           style={styles.data}
           onLayout={e => console.log(e.nativeEvent.layout.height)}>
-          <Text style={styles.description}>
+          <ParsedText style={styles.description} parse={[
+            {type: 'url',style: styles.url, onPress: handleUrlPress},
+          ]}>
             {`${text.substring(0, textHeight)}`}
             {text.length >= 12 ? (
               <Text
@@ -112,7 +119,7 @@ const InfoScreen = ({info}) => {
                 {more ? '...more' : '...less'}
               </Text>
             ) : null}
-          </Text>
+          </ParsedText>
         </View>
         <TouchableOpacity style={styles.game}>
           <Image style={styles.logo} />

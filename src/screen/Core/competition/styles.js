@@ -34,19 +34,18 @@ export const styles = StyleSheet.create({
   },
   gameWrapper: {
     paddingBottom:moderateScale(10),
-    borderWidth: 1,
+    borderWidth: 0.4,
     borderBottomColor: '#9a00ff',
     width: moderateScale(width),
     marginBottom: moderateScale(10),
-    backgroundColor:'#252626',
+   // backgroundColor:'#252626',
     paddingTop:moderateScale(10),
     paddingLeft:moderateScale(20)
   },
   image: {
-    width: moderateScale(width-10),
-    height: moderateScale(180),
-    borderTopLeftRadius: moderateScale(20),
-    borderTopRightRadius: moderateScale(20),
+    width: moderateScale(80),
+    height: moderateScale(80),
+    borderRadius:moderateScale(10)
   },
   gameText: {
     color: 'white',
@@ -101,6 +100,9 @@ export const styles = StyleSheet.create({
   },
   wrapper: {
     alignItems: 'center',
+    flexDirection:'row',
+    paddingTop:moderateScale(20),
+    paddingLeft:moderateScale(10)
   },
   icon: {
     height: moderateScale(20),

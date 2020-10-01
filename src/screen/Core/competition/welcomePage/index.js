@@ -19,6 +19,7 @@ import Config from '@Config/default';
 import PlayerScreen from './players';
 import MatchScreen from './match';
 import RazorpayCheckout from 'react-native-razorpay';
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import {
   RewardedAd,
   RewardedAdEventType,
@@ -87,7 +88,6 @@ const CutomHeaderScreen = ({navigation}) => {
     getDetailsbyId({id: id})
       .then(data_tour => set_data(data_tour.data))
       .catch(err => console.log(err));
-    console.log(data);
   }, []);
 
   useEffect(() => {
@@ -115,11 +115,6 @@ const CutomHeaderScreen = ({navigation}) => {
       amount: amount,
       name: 'Acme Corp',
       order_id: order_id, //Replace this with an order_id created using Orders API. Learn more at https://razorpay.com/docs/api/orders.
-      prefill: {
-        email: 'gaurav.kumar@example.com',
-        contact: '9191919191',
-        name: 'Gaurav Kumar',
-      },
       theme: {color: '#53a20e'},
     };
     RazorpayCheckout.open(options)
@@ -170,15 +165,23 @@ const CutomHeaderScreen = ({navigation}) => {
             onPress={() => renderJoin()}
           />
         </View>
-        <View style={styles.border}>
-          <Text style={styles.text}>You have 4 tickets</Text>
-          <Text style={styles.text2} onPress={() => rewarded.show()}>
-            Buy more >
+        <TouchableOpacity style={styles.border} onPress={()=>navigation.navigate('complain')}>
+          <Text style={styles.text}>Have You Any Complain</Text>
+          <Text style={styles.text2} >
+            click here >
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
     );
   };
+
+  const renderHeader = () => {
+    return (
+      <View style={styles.header}>
+        <Icon name={'ellipsis-v'} color={'white'} size={24}/>
+      </View>
+    )
+  }
 
   return (
     <>
@@ -187,6 +190,7 @@ const CutomHeaderScreen = ({navigation}) => {
       <StickyParallaxHeader
         headerType="TabbedHeader"
         logo={{}}
+        header={()=>renderHeader()}
         backgroundColor={Primary}
         backgroundImage={require('../../../../static/index.jpeg')}
         renderMiddle={renderBody()}
