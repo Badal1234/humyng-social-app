@@ -4,7 +4,6 @@ import SigninScreen from '../../screen/Auth/signin';
 import SignupScreen from '../../screen/Auth/signup';
 import Otp from '../../screen/Auth/otp';
 import Intro from '../../screen/Auth/intro';
-import Verify from '../../screen/Auth/verify';
 import Info from '../../screen/Auth/InfoProvider';
 const Auth = createStackNavigator(
   {
@@ -28,13 +27,6 @@ const Auth = createStackNavigator(
     },
     Intro: {
       screen: Intro,
-      navigationOptions: {
-        headerShown: false,
-      },
-    },
-    Verify: {
-      screen: Verify,
-
       navigationOptions: {
         headerShown: false,
       },

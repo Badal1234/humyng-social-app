@@ -121,7 +121,7 @@ export const styles = StyleSheet.create({
     letterSpacing:1
   },
   Adcontainer:{
-    backgroundColor:'#823ac5',
+    //backgroundColor:'#823ac5',
     borderRadius:moderateScale(10)
   }
 });

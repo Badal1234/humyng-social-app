@@ -1,51 +1,19 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import Home from '../../screen/Core/Home';
 import {moderateScale} from 'react-native-size-matters';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import Config from '@Config/default';
 import TabImages from '../../@Component/TabImages';
-import Camera from '../../screen/Core/Camera';
-import Notification from '../../screen/Core/Notification';
-import Search from '../../screen/Core/Search';
-import Bookmark from '../../screen/Core/Bookmark';
-import ScreenView from '../../screen/Core/ScreenView';
 import React from 'react';
-import TabBar from '@Component/TabBar';
-import Podcast from '../../screen/Core/PodCast';
-import EnterScreen from '../../screen/Core/enterScreen';
 import ProfilePage from '../../screen/Core/Common/profilePage';
-import Story from '../../screen/Core/story';
-import Blank from '../../screen/Core/blank';
-import AddPost from '../../screen/Core/AddPost';
-import ImageEditor from '../../screen/Core/ImageEditor';
-import ImageList from '../../screen/Core/ImageList';
-import MediaInfo from '../../screen/Core/MediaInfo';
-import VideoEditing from '../../screen/Core/VideoEditing';
-import ImagePoster from '../../screen/Core/ImagePoster';
-import RecordAudio from '../../screen/Core/RecordAudio';
-import RenderScreen from '../../screen/Core/renderScreen';
 import EditProfile from '../../screen/Core/EditProfile';
-import Localnotify from '../../screen/Core/localnotify';
 import Competition from '../../screen/Core/competition/welcomePage';
 import RegistartionScreen from '../../screen/Core/competition/Registration';
 import AddName from '../../screen/Core/competition/addName';
 import CompetitionPage from '../../screen/Core/competition/';
-import CommentSection from '../../screen/Core/enterScreen/commentSection';
-import podcastScreen from '../../screen/Core/enterScreen/podcastScreen';
 import ChatRoom from '../../screen/Core/Chat/chatroomScreen/index';
 import EntryScene from '../../screen/Core/Chat/EntryScene/index';
 const TABS = {
-  Home: createStackNavigator(
-    {
-      EnterScreen: {screen: EnterScreen},
-      podcastScreen: {screen: podcastScreen},
-    },
-    {
-      defaultNavigationOptions: {headerShown: false},
-    },
-  ),
-  AddPost: AddPost,
   Notification: createStackNavigator(
     {
       Competition: {screen: CompetitionPage},
@@ -57,7 +25,18 @@ const TABS = {
       defaultNavigationOptions: {headerShown: false},
     },
   ),
-  Search: Notification,
+  Search: createStackNavigator(
+    {
+      chatRoom: {screen: ChatRoom},
+      EntryScene: {screen: EntryScene},
+    },
+    {
+      defaultNavigationOptions: {
+        headerShown: false,
+      },
+      initialRouteName: 'EntryScene',
+    },
+  ),
   Bookmark: createStackNavigator(
     {
       ProfilePage: {screen: ProfilePage},
@@ -72,11 +51,11 @@ const TABS = {
 const getTabBarIcon = (navigation, focused) => {
   const {routeName} = navigation.state;
   let tabOption = '';
-  if (routeName === 'Home') {
+  if (routeName === 'Notification') {
     tabOption = 1;
-  } else if (routeName === 'Camera') {
+  } else if (routeName === 'Search') {
     tabOption = 2;
-  } else if (routeName === 'Notification') {
+  } else if (routeName === 'Bookmark') {
     tabOption = 3;
   }
   return <TabImages focused={focused} tabOption={tabOption} />;
@@ -102,7 +81,7 @@ export const checkNavConfig = () => {
         // fontFamily: regular,
       },
       style: {
-        backgroundColor: LightWhite,
+        backgroundColor: '#171817',
         paddingTop: moderateScale(4),
         borderTopColor: 'transparent',
       },
@@ -122,7 +101,7 @@ export const checkNavConfig = () => {
   return navConfigs;
 };
 
-const chatStack = createStackNavigator(
+export const chatStack = createStackNavigator(
   {
     chatRoom: {screen: ChatRoom},
     EntryScene: {screen: EntryScene},
@@ -136,26 +115,10 @@ const chatStack = createStackNavigator(
 );
 
 export const _tabNavigator = () => {
-  const BottomTab = createBottomTabNavigator(TABS, {
-    tabBarComponent: TabBar,
-    backBehavior: 'history',
-  });
+  const BottomTab = createBottomTabNavigator(TABS, checkNavConfig());
   return createStackNavigator(
     {
       Bottom: {screen: BottomTab},
-      RenderScreen: {screen: RenderScreen},
-      Camera: {screen: Camera},
-      Podcast: {screen: Podcast},
-      Story: {screen: Story},
-      Notification: {screen: Notification},
-      ImageEditor: {screen: ImageEditor},
-      ImageList: {screen: ImageList},
-      MediaInfo: {screen: MediaInfo},
-      VideoEditing: {screen: VideoEditing},
-      ImagePoster: {screen: ImagePoster},
-      RecordAudio: {screen: RecordAudio},
-      CommentSection: {screen: CommentSection},
-      ChatStack: {screen: chatStack},
     },
 
     {

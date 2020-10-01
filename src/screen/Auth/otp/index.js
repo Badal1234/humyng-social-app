@@ -12,7 +12,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {styles} from './styles';
 import Button from '@Component/Button';
 import {connect} from 'react-redux';
-import Verify from '../verify';
 import * as userAuthActions from '@Actions/user.authAction';
 import Amplify, {Auth, API, Hub} from 'aws-amplify';
 const Otp = ({navigation, setUserLoginData}) => {
