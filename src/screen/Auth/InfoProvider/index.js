@@ -160,6 +160,9 @@ const Info = ({token, setUserLoginData, navigation,username}) => {
               console.log(
                 'This feature is not available (on this device / in this context)',
               );
+
+
+              
               break;
             case RESULTS.DENIED:
               console.log(
