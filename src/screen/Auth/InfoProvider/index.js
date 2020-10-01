@@ -161,8 +161,6 @@ const Info = ({token, setUserLoginData, navigation,username}) => {
                 'This feature is not available (on this device / in this context)',
               );
 
-
-              
               break;
             case RESULTS.DENIED:
               console.log(
@@ -173,6 +171,7 @@ const Info = ({token, setUserLoginData, navigation,username}) => {
               console.log('The permission is granted');
               set_visible(true);
               break;
+
             case RESULTS.BLOCKED:
               console.log(
                 'The permission is denied and not requestable anymore',
