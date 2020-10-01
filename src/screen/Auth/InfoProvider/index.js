@@ -31,7 +31,7 @@ const Info = ({token, setUserLoginData, navigation,username}) => {
   const [loading, set_loading] = useState(false);
   const [blob, set_blob] = useState(null);
   const [checked , set_check] = useState(false)
-  const [err,set_err] = useState()
+  const [err,set_err] = useState(null)
   const options = {
     title: 'Select Avatar',
     customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
@@ -87,7 +87,7 @@ const Info = ({token, setUserLoginData, navigation,username}) => {
         set_uri(source);
         set_visible(false);
         set_blob({
-          path: response.data,
+          path: response.uri,
         });
       }
     });
@@ -160,6 +160,9 @@ const Info = ({token, setUserLoginData, navigation,username}) => {
               console.log(
                 'This feature is not available (on this device / in this context)',
               );
+
+
+              
               break;
             case RESULTS.DENIED:
               console.log(
@@ -199,15 +202,19 @@ const Info = ({token, setUserLoginData, navigation,username}) => {
           resolve(result);
         })
         .catch(err => {
-          reject(err);
+          console.log(err)
         });
     });
   };
 
   console.log('sssss')
   const usernameCheck = () => {
-    checkusername({username:name}).then(({status})=>set_check(status)).catch(err=>console.log(err))
+    checkusername({username:name}).then(({status})=>set_check(status)).catch(err=>set_err(err))
   }
+
+  useEffect(()=>{
+    usernameCheck()
+  },[name])
 
 
   const send = async () => {
@@ -218,7 +225,7 @@ const Info = ({token, setUserLoginData, navigation,username}) => {
     const file_blob = await filepath.blob();
     console.log(file_blob);
     try {
-      const profile_key = await uploadToFirebase(blob);
+      const profile_key = await uploadToFirebase(file_blob);
       console.log(profile_key)
       UserSetup({
         name: name,
@@ -258,13 +265,13 @@ const Info = ({token, setUserLoginData, navigation,username}) => {
           style={styles.input}
           placeholder={'Name'}
           onChangeText={text => {set_name(text)
-            usernameCheck()
+          
           }}
         />
         
       </View>
       <View style={styles.check}>
-        {checked? <Icon name={'check'}  color={'green'} size={24}/>:err? <Icon name={'times'}  color={'red'} size={24}/>:null}
+        {checked? <Icon name={'check'}  color={'green'} size={24}/>:err? <Icon name={'times'}  color={'red'} size={24}/>:<Icon name={'times'}  color={'red'} size={24}/>}
      
 
       </View>

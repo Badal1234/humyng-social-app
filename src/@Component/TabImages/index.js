@@ -48,19 +48,11 @@ class TabImages extends Component {
       case 3:
         if (focused) {
           return (
-            <View
-              style={{
-                borderColor: 'white',
-                borderBottomWidth: 5,
-                borderLeftWidth: 5,
-                borderRightWidth: 5,
-                height: 80,
-                borderRadius: 1000,
-              }}>
+            <View>
               <Icon
                 adjustsFontSizeToFit={true}
-                color={Primary}
-                name="bell"
+                color={'white'}
+                name="user"
                 size={20}
               />
             </View>
@@ -68,7 +60,7 @@ class TabImages extends Component {
         }
         return (
           <View>
-            <Icon adjustsFontSizeToFit={true} name="bell" size={20} color={'#565857'}/>
+            <Icon adjustsFontSizeToFit={true} name="user" size={20} color={'#565857'}/>
           </View>
         );
     }

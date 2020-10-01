@@ -8,6 +8,7 @@ import authReducer from './auth.reducer';
 import fileReducer from './file.reducer';
 import postReducer from './post.reducer';
 import tournamentReducer from './competition.reducer';
+import chatReducer from './chat.reducer';
 
 const {UCCaccheKeyStore} = Config;
 
@@ -24,6 +25,7 @@ const appReducer = persistCombineReducers(config, {
   file: fileReducer,
   post: postReducer,
   tournament: tournamentReducer,
+  chat: chatReducer,
 });
 
 const rootReducer = (state, action) => {

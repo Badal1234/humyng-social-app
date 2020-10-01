@@ -16,14 +16,16 @@ export const styles = StyleSheet.create({
   chatBody:{
       height:moderateScale(60),
       flexDirection:'row',
-      width:width
+      width:width,
+      alignItems:'center'
 
   },
   separator:{
       width:width - moderateScale(50),
-      height:moderateScale(1),
-      backgroundColor:'#1ecbe1',
-      alignSelf:'flex-end'
+      height:moderateScale(0.4),
+      backgroundColor:'white',
+      alignSelf:'flex-end',
+      opacity:0.3
   },
   profile:{
       width:moderateScale(50),
@@ -33,12 +35,12 @@ export const styles = StyleSheet.create({
   },
   username:{
       color:'white',
-      fontSize:moderateScale(20),
-      fontFamily:regular
+      fontSize:moderateScale(16),
+      fontFamily:light
   },
   message:{
       color:'white',
-      fontSize:moderateScale(15),
+      fontSize:moderateScale(13),
       fontFamily:light,
       opacity:0.7
   },
@@ -49,15 +51,18 @@ export const styles = StyleSheet.create({
   },
   header:{
     width:width,
-    height:moderateScale(80),
-    backgroundColor:'#1ecbe1',
-    marginBottom:moderateScale(10)
+    height:moderateScale(50),
+    backgroundColor:'#2b2c33',
+    marginBottom:moderateScale(10),
+    borderBottomWidth:moderateScale(5),
+    borderBottomColor:'#323232'
 
   },
   chat:{
-    fontSize:moderateScale(30),
+    fontSize:moderateScale(22),
     color:'white',
-    fontFamily:regular
+    fontFamily:regular,
+    padding:moderateScale(10)
   },
   division:{
     justifyContent:'space-around',
@@ -71,5 +76,23 @@ export const styles = StyleSheet.create({
     fontSize:moderateScale(17),
     color:'white',
     fontFamily:light
+  },
+  plus:{
+    padding:moderateScale(20)
+  },
+  image:{
+    width:moderateScale(50),
+    height:moderateScale(50),
+    borderRadius:moderateScale(10)
+  },
+  upper:{
+    flexDirection:'row',
+    width:width-moderateScale(50),
+    justifyContent:'space-between'
+  },
+  time:{
+    color:'white',
+    paddingRight:moderateScale(30)
+    
   }
 });

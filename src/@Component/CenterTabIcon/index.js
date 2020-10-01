@@ -21,7 +21,7 @@ export default function CenterTabIcon({focused}) {
       start={{x: 0.5, y: 0.5}}
       style={Styles.icon}>
       <View>
-        <Icon color={focused ? 'white' : Black} name="camera" size={24} />
+        <Icon color={focused ? 'white' : Black} name="envelope-open" size={24} />
       </View>
     </LinearGradient>
   );

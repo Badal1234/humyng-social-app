@@ -19,7 +19,7 @@ import {connect} from 'react-redux';
 import * as userAuthActions from '@Actions/user.authAction';
 const EditProfile = ({navigation, username}) => {
   const data = navigation.getParam('info');
-  const [name, set_name] = useState('ddd');
+  const [name, set_name] = useState(data.name);
   const [profile_uri, set_profile_uri] = useState('');
   // const [username, set_username] = useState('');
   const [bio, set_bio] = useState(data.info);
@@ -109,7 +109,7 @@ const EditProfile = ({navigation, username}) => {
       name: name,
       description: bio,
       interest: interest,
-      profile_key: profile_key.key,
+      profile_key: profile_key,
     }).then(data2 => navigation.goBack());
   };
 

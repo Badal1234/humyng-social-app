@@ -28,6 +28,7 @@ const Signin = ({navigation, setUserLoginData, username}) => {
   const [loading, set_loading] = useState(false);
 
   const login = () => {
+    set_loading(true)
     const a = email.replace(/\s+/g, '');
     console.log(a);
     try {
@@ -39,9 +40,11 @@ const Signin = ({navigation, setUserLoginData, username}) => {
           isLogedIn: true,
           token: user.signInUserSession.accessToken.jwtToken,
         });
+        set_loading(false)
         navigation.navigate('EnterScreen');
-      });
+      }).catch((err)=>console.log(err))
     } catch (error) {
+      set_loading(false)
       Alert.alert(error.message);
     }
   };
@@ -64,25 +67,15 @@ const Signin = ({navigation, setUserLoginData, username}) => {
           <Text style={styles.text3}>
             Enter Your Information Below to Login
           </Text>
-          <Text style={styles.text4}>With The Social Account</Text>
         </View>
-        <View>
-          <GoogleSigninButton
-            style={{width: 120, height: 48}}
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Dark}
-            onPress={() => {
-              set_run(true);
-              Auth.federatedSignIn({provider: 'Google'});
-            }}
-          />
-        </View>
+
         <View style={styles.inputContainer}>
           <Text>{}</Text>
           <TextInput
             style={styles.textInput}
             placeholder={'E-mail'}
             returnKeyType="next"
+            
             onSubmitEditing={() => {
               const a = email.match(
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
@@ -101,6 +94,8 @@ const Signin = ({navigation, setUserLoginData, username}) => {
             ref={input => (inputRef = input)}
             onSubmitEditing={() => input2.focus()}
             onChangeText={text => set_pass(text)}
+            textContentType={'password'}
+            secureTextEntry={true}
           />
         </View>
         <View style={styles.lower}>
@@ -116,7 +111,7 @@ const Signin = ({navigation, setUserLoginData, username}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.submit}>
-          <Button1 text={'SIGNin'} ref={submit} onPress={() => login()} />
+          <Button1 text={'SIGNin'} ref={submit} onPress={() => login()} indicator={loading}/>
         </View>
         <View style={styles.lower}>
           <View>

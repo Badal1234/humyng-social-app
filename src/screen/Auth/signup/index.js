@@ -17,6 +17,7 @@ import * as userAuthActions from '@Actions/user.authAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {styles} from './styles';
 import Amplify, {Auth, API, Hub} from 'aws-amplify';
+import Modal from 'react-native-modal';
 const Signin = ({uid, setUserLoginData, navigation}) => {
   var submit = useRef();
 
@@ -29,17 +30,23 @@ const Signin = ({uid, setUserLoginData, navigation}) => {
   const [error, setError] = useState(null);
 
   const signIn = async () => {
+    setLoading(true);
     const a = email.replace(/\s+/g, '');
     Auth.signUp({
       username: a,
       password: pass,
-    }).then(data => {
-      console.log(data);
-      navigation.navigate('Otp', {
-        username: data.user.username,
-        password: pass,
+    })
+      .then(data => {
+        setLoading(false);
+        console.log(data);
+        navigation.navigate('Otp', {
+          username: data.user.username,
+          password: pass,
+        });
+      })
+      .catch(err => {
+        setLoading(false);
       });
-    });
   };
 
   function ValidateEmail(mail) {
@@ -57,7 +64,9 @@ const Signin = ({uid, setUserLoginData, navigation}) => {
       behavior="position"
       keyboardVerticalOffset={20}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TouchableOpacity style={styles.upperButton} onPress={()=>navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.upperButton}
+          onPress={() => navigation.goBack()}>
           <View style={styles.icon}>
             <Icon name="chevron-left" color={'white'} size={20} />
           </View>
@@ -73,6 +82,7 @@ const Signin = ({uid, setUserLoginData, navigation}) => {
           <TextInput
             style={styles.textInput}
             placeholder={'E-mail'}
+            placeholderTextColor={'white'}
             keyboardType="email-address"
             onChangeText={text => set_email(text)}
             returnKeyType="send"
@@ -91,6 +101,7 @@ const Signin = ({uid, setUserLoginData, navigation}) => {
           <TextInput
             style={styles.textInput}
             placeholder={'Password'}
+            placeholderTextColor={'white'}
             keyboardType="email-address"
             onChangeText={text => set_pass(text)}
             returnKeyType="send"
@@ -111,6 +122,11 @@ const Signin = ({uid, setUserLoginData, navigation}) => {
           />
         </TouchableOpacity>
       </ScrollView>
+      <Modal
+        style={styles.modal}
+        isVisible={false}>
+        <View style={{backgroundColor: 'white'}} />
+      </Modal>
     </View>
   );
 };
